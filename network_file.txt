@@ -1,0 +1,66 @@
+Network configuration files:
+1)listener.ora
+2)tnsnames.ora
+3)sqlnet.ora
+
+Tools: netmgr,netca ---> to create listener and tns entry.
+
+listener.ora
+
+	1. listener is listening new incoming connection.
+	2. listener is authorizing the user..listener comes in picture when user try to connect to with db.
+		listener authorizing the user with the help of pmon process.
+	3. listener contains following details:
+		1. Host name or Host Ip
+		2. Port No  ---> default port 1521
+		3. ORACLE_SID
+		4. ORACLE_HOME
+		
+	4. listener is residing in server side and used for remotely connection with db.
+	5. The location of listener file is $ORACLE_HOME/network/admin.
+	6. There are followoing option to control listener.
+	
+		- lsnrctl start listener_name           ---> To start listener
+		- lsnrctl stop listener_name			---> To stop listener
+		- lsnrctl status listener_name			---> To check status of  listener
+		- lsnrctl reload listener_name			---> To reload listener when make any changes in listener e.g change port no, ip etc.
+		
+	7. In listener there are two types of registration
+		1. static registration
+		2. dynamic registration
+		
+	8. In static registration we need to mention ORACLE_SID in listener.ora file.
+	9. In dynamic registration we don't need to set ORACLE_SID ..here listener registration by pmon process..
+		-for these we need to set local_listener paramete by following command:
+		- SQL> alter system set local_listener='(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST =192.168.100.233)(PORT = 1530)))'
+		- SQL> altet system register;
+		
+	10. static listener status always show 'UNKNOWN' wheter db is up or not.
+		and dynamic listener status show 'READY' and it's work only if db is up.
+		
+	11. one instance give service to multiple services..	
+	12. but many instance can't service to single service.
+	
+	13. we can change service name in db..
+	
+	
+tnsnames.ora
+
+	1. This file reside in client side and the location of this file is $ORACLE_HOME/network/admin
+	2. This file is used to connect db remotely.
+	3. This file contains following details:
+		1. Host name or Host Ip
+		2. Port No
+		3. ORACLE_SID or SERVICE_NAME
+		
+	4. Ex: sqlplus alim/alim@DR
+	5. tnsping used to check connectivity with listener..
+		Ex: tnsping [Alias_name]
+		it will give response wheter it's reachable to listener or not.
+	
+	
+	
+sqlnet.ora
+
+	1. This file used for security related purpose..which control the network configuration file of Oracle Net Services..
+	2. like which host can access to db or which host can't access..
