@@ -1,0 +1,246 @@
+Oracle installation Pre requisite:
+
+1)Automatic Setup:
+
+	oracle-database-preinstall-19c package installation:
+
+	# yum install -y oracle-database-preinstall-19c
+	----------------------------------------------------------------------------------------------------------------------------------
+
+	if abovoe command not working..then do following command:
+
+	# curl -o oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm 
+	https://yum.oracle.com/repo/OracleLinux/OL7/latest/x86_64/getPackage/oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm
+
+	# yum -y localinstall oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm
+		or
+	# rpm -ivh oracle-database-preinstall-19c-1.0-1.el7.x86_64.rp
+
+	-------------------------------------------------------------------------------------------------------------------------------------
+
+	--->This package perform all prerequisite by issue abovoe command.
+		1)user and group creation
+			user 	=	oracle
+			group 	= 	oinstall,dba,oper,backupdba,dgdba,kmdba,racdba
+
+		2)kernel parameter  (/etc/sysctl.conf)
+		
+			fs.file-max = 6815744
+			kernel.sem = 250 32000 100 128
+			kernel.shmmni = 4096				(in bytes)
+			kernel.shmall = 1073741824			(in pages)
+			kernel.shmmax = 4398046511104		(in bytes)
+			kernel.panic_on_oops = 1
+			net.core.rmem_default = 262144
+			net.core.rmem_max = 4194304
+			net.core.wmem_default = 262144
+			net.core.wmem_max = 1048576
+			net.ipv4.conf.all.rp_filter = 2
+			net.ipv4.conf.default.rp_filter = 2
+			fs.aio-max-nr = 1048576
+			net.ipv4.ip_local_port_range = 9000 65500
+						
+		
+			ipcs -l  	---> to show current kernel parameter
+			sysctl -a 	---> to show current kernel parameter		
+			sysctl -w 	---> to modify kernel parameter
+			sysctl -p 	---> to apply changes kernel parameter
+			
+			Ex:
+				sysctl -w kernel.shmall=4398046511189
+				sysctl -p
+				
+		
+		3) user limit	(/etc/security/limits.d/oracle-database-preinstall-19c.conf)
+						
+			oracle   soft   nofile    1024
+			oracle   hard   nofile    65536
+			oracle   soft   nproc    16384
+			oracle   hard   nproc    16384
+			oracle   soft   stack    10240
+			oracle   hard   stack    32768
+			oracle   hard   memlock    134217728
+			oracle   soft   memlock    134217728
+			
+			ulimit -a (to check user limit)
+			
+		4) Check the following package is install on our system or not..if not then we have to install package from yum command:
+			
+			
+			rpm -qa |grep -E 'bc|binutils|compat-openssl10|elfutils-libelf|elfutils-libelf-devel|
+			glibc|glibc-devel|ksh|libaio|libaio-devel|libXrender|libX11|libXau|libXi libXtst|libgcc|
+			libnsl|librdmacm|libstdc++|libstdc++-devel|libxcb|libibverbs|make|smartmontools|sysstat'
+			
+					---> To check above package have or not in our system.
+	
+			yum install -y package_name
+				Ex: yum install -y <package_name> 
+				
+		5)File Structure:
+		
+				ORACLE_HOME
+				mkdir -p /oracle/app/oracle/product/19.0.0/dbhome_1
+				chown oracle:oinstall /oracle/			
+				chmod -R 775 /oracle/
+
+		
+			
+
+Manual Setup:
+
+		In manual setup we have to do  above step manually:
+		
+		Group creation:
+			#groupadd oinstall
+			
+		User creation:
+			#useradd oracle -g oinstall
+		
+		Change oracle user password		
+			#passwd oracle
+			
+		
+		kernel parameter  (/etc/sysctl.conf)
+		
+			fs.file-max = 6815744
+			kernel.sem = 250 32000 100 128
+			kernel.shmmni = 4096				(in bytes)
+			kernel.shmall = 1073741824			(in pages)
+			kernel.shmmax = 4398046511104		(in bytes)
+			kernel.panic_on_oops = 1
+			net.core.rmem_default = 262144
+			net.core.rmem_max = 4194304
+			net.core.wmem_default = 262144
+			net.core.wmem_max = 1048576
+			net.ipv4.conf.all.rp_filter = 2
+			net.ipv4.conf.default.rp_filter = 2
+			fs.aio-max-nr = 1048576
+			net.ipv4.ip_local_port_range = 9000 65500
+						
+		
+			ipcs -l  	---> to show current kernel parameter
+			sysctl -a 	---> to show current kernel parameter		
+			sysctl -w 	---> to modify kernel parameter
+			sysctl -p 	---> to apply changes kernel parameter
+			
+			Ex:
+				sysctl -w kernel.shmall=4398046511189
+				sysctl -p
+				
+		
+		user limit	(/etc/security/limits.d/oracle-database-preinstall-19c.conf)
+						
+			oracle   soft   nofile    1024
+			oracle   hard   nofile    65536
+			oracle   soft   nproc    16384
+			oracle   hard   nproc    16384
+			oracle   soft   stack    10240
+			oracle   hard   stack    32768
+			oracle   hard   memlock    134217728
+			oracle   soft   memlock    134217728
+			
+			ulimit -a (to check user limit)
+				
+		
+		File Structure:
+			1) ORACLE_HOME
+			
+				#chown oracle:oinstall /oracle/			
+				$mkdir -p /oracle/app/oracle/product/19.0.0/dbhome_1
+				$chmod -R 775 /oracle/
+
+		
+
+		Set secure Linux to permissive by editing the "/etc/selinux/config" file, making sure the SELINUX flag is set as follows.
+
+			SELINUX=permissive
+			Once the change is complete, restart the server or run the following command.
+
+		# setenforce Permissive
+			If you have the Linux firewall enabled, you will need to disable or configure it, as shown here. To disable it, do the following.
+
+		# systemctl stop firewalld
+		# systemctl disable firewalld	
+		
+		
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+INSTALLATION ORACLE 19c:
+
+
+Step 1: download Oracle Home 19c zip file
+
+Step 2: unzip the file to Oracle Home location:
+		Ex: unzip <path of zip location> -d <home location>
+		
+
+Step 3:
+		export CV_ASSUME_DISTID=0EL7.6  ----> For Cent OS 8
+		export DISPLAY=:0				----> if face display error
+		Go to ORACLE_HOME location and run  ./runInstaller
+		cd $ORACLE_HOME
+		
+Step 4: set dbhome path in bash profile
+		vi .bash_profile
+		export ORACLE_HOME=/oracle/app/oracle/product/19.0.0/dbhome_1
+		PATH=$PATH:$ORACLE_HOME:
+
+
+		
+----------------------------------------GUI INSTALLATION---------------------------------------------------------------
+
+Step 5: follow the GUI step and in these steps also checking the packages required for installation..
+		so if any warning come..then install missing package by rpm or yum command.
+		
+Step 6: and finally we have to run these script by root user in a given sequence.. and after successfully run script click on ok..
+		it will generat logs file in /oracle/app/oraInventory/logs directory with the timestamp..
+
+Step 7: we can check dbhome location in orainventory ..
+		
+		cd /oracle/app/oraInventory/ContentsXML
+		cat inventory.xml
+			----> 	<HOME NAME="OraDB19Home1" LOC="/oracle/app/oracle/product/19.0.0/dbhome_1" TYPE="O" IDX="1"/>
+					
+					
+----------------------------------------MANUALLY INSTALLATION----------------------------------------------------------------				
+
+Step 5: cd $ORACLE_HOME
+		./runInstaller -help
+		./runInstaller -silent -executePrereqs
+			---> To check prerequisite it will generat logs file in /oracle/app/oraInventory/logs directory with the timestamp..
+		
+Step 6: If pre requisite done successfully then edit response file which located in:
+			$cd $ORACLE_HOME/install/response
+			--db_install.rsp
+			
+			before making any changes in response file make copy of that file..
+				$cp db_install.rsp  db_install_bkp.rsp
+			
+
+Step 7:	After changes in response file we have to run following command to install software/binary..
+		
+		$cd $ORACLE_HOME
+		$./runInstaller -silent -responseFile $ORACLE_HOME/install/response/db_install.rsp -ignorePrereq
+		
+Step 8: and finally we have to run these script by root user in a given sequence..
+		it will generat logs file in /oracle/app/oraInventory/logs directory with the timestamp..
+
+Step 9: we can check dbhome location in orainventory ..
+
+		cd /oracle/app/oraInventory/ContentsXML
+		cat inventory.xml
+			----> <HOME NAME="OraDB19Home1" LOC="/oracle/app/oracle/product/19.0.0/dbhome_1" TYPE="O" IDX="1"/>
+			
+				
+				
+				
+						
+			
+
+
+
+		
+			
+	
+
+
