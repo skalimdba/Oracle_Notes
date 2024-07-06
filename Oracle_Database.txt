@@ -1,0 +1,36 @@
+
+Data:
+	It is a peace of information. and unusally , the data is unprocessed and unorganized.
+
+Database:
+	It is organized collection of information.
+	
+DBMS:
+	1. we need a system to manage tha data and we call this system DBMS.
+	2. so DBMS is the Database Management System to store and retrieve and modify the data in the database.
+	3. Oracle is RDBMS (relation database management system) which store information in tabular format.
+	
+
+
+Oracle database consists of two main components:
+	1. Database storage
+	2. Oracle Instance (Database Instance)
+
+	
+Database:
+		1. It's the organized collection of information..
+		2. It contains a collection of database files stored in disk storage(physcial).
+		
+
+Database Files:
+	
+	There are following types of database files:
+	1. Parameter Files
+	2. Control Files
+	3. Redo log Files
+	4. Data Files
+	5. Archive log Files
+	6. Password Files
+	7. Alert log files
+	8. Trace Files
+
