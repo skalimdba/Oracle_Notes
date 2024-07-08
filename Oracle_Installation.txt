@@ -14,7 +14,7 @@ Oracle installation Pre requisite:
 
 	# yum -y localinstall oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm
 		or
-	# rpm -ivh oracle-database-preinstall-19c-1.0-1.el7.x86_64.rp
+	# rpm -ivh oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm
 
 	-------------------------------------------------------------------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ Oracle installation Pre requisite:
 
 		2)kernel parameter  (/etc/sysctl.conf)
 		
-			fs.file-max = 6815744
+			fs.file-max = 6815744          	
 			kernel.sem = 250 32000 100 128
 			kernel.shmmni = 4096				(in bytes)
 			kernel.shmall = 1073741824			(in pages)
@@ -69,7 +69,7 @@ Oracle installation Pre requisite:
 			
 			rpm -qa |grep -E 'bc|binutils|compat-openssl10|elfutils-libelf|elfutils-libelf-devel|
 			glibc|glibc-devel|ksh|libaio|libaio-devel|libXrender|libX11|libXau|libXi libXtst|libgcc|
-			libnsl|librdmacm|libstdc++|libstdc++-devel|libxcb|libibverbs|make|smartmontools|sysstat'
+			libnsl|librdmacm|libstdc++|libstdc++-devel|libxcb|libibverbs|make|smartmontools|sysstat
 			
 					---> To check above package have or not in our system.
 	
