@@ -1,0 +1,68 @@
+SGA: 
+
+Shared pool:  
+	
+	1. Data dictionary cache: metadata of database..like how many objects are there, no.of rows etc.
+	2. Library cache: sql syntax, semantics check here..and generate plan hash value..
+	
+Database Buffer cache:
+	
+	1. 
+	
+	
+
+Redlog Buffer Cache:
+
+		1. It contain SCN, Timestamp, old and new image value.
+
+PGA:
+		1. it's private 
+		2. it's store bind variable(user specific)..
+		3. user login information
+		4. sorting 
+		
+
+Background Process:
+
+	by the help of these BG process database communicate with OS..	
+	
+	1. PMON (Process Monitor): 	
+		1. it's monitor user process and background process..and if any non mandatory process not working then it will try to start.
+		2. Perform the process allocation and release lock and resources (which taken by users).
+		
+	
+	2. SMON (System/Super Monitor):
+		1. instance recovery when instance crash happened.
+		2. free temporary tablespace.
+		3. it's system level cleanup duties.
+		
+	3. DBWR (Database Writer)
+	
+		1. commited data write into datafile.
+			when write:
+			1. checkpoint
+			2. database stop
+			3. if db buffer full and new request come then dirty buffer write  into datafile.
+			
+		unused -> pinned -> used -> Dirty (afetr commit) -> clean 	
+			
+	4. LGWR
+		1.Every 3 sec.
+		2. 1/3rd full.
+		3. Checkpoint.
+		4. Switch log.
+		5. DB stop
+		6. 1Mb redo generated.
+		
+	5. CKPT
+
+		1. Update SCN between datafile and controlfile header.
+		
+		When
+			1. Manually Checkpoint
+			2. DB Stop.
+			3. tablespace offline/online, backup initiated.
+		
+		
+	
+		
