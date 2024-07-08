@@ -27,8 +27,11 @@ Background Process:
 	by the help of these BG process database communicate with OS..	
 	
 	1. PMON (Process Monitor): 	
-		1. it's monitor user process and background process..and if any non mandatory process not working then it will try to start.
-		2. Perform the process allocation and release lock and resources (which taken by users).
+		1. it's monitor user process and all other background process.
+		    and if any process not working then it will try restart.
+
+		2. Perform the process allocation and releasr resources (which taken by users).
+		3. releas lock.
 		
 	
 	2. SMON (System/Super Monitor):
