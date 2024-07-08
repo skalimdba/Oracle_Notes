@@ -2,24 +2,28 @@ SGA:
 
 Shared pool:  
 	
-	1. Data dictionary cache: metadata of database..like how many objects are there, no.of rows etc.
+	1. Data dictionary cache: contain metadata of database..like how many objects are there, no.of rows etc.
 	2. Library cache: sql syntax, semantics check here..and generate plan hash value..
 	
 Database Buffer cache:
 	
-	1. 
-	
-	
+	1. It's contain actual copy of data block from data files.
+	2. Data block size can be 2k,4k,8k,16k,32k.. default size 8k
+
+	Different Buffer status:
+	unused -> pinned -> used -> Dirty (afetr commit) -> clean 
+
 
 Redlog Buffer Cache:
 
-		1. It contain SCN, Timestamp, old and new image value.
+	1. It contain all the changes of database goes here..
+	1. It contain SCN, Timestamp, old and new image value.
 
 PGA:
-		1. it's private 
-		2. it's store bind variable(user specific)..
-		3. user login information
-		4. sorting 
+	1. it's private 
+	2. it's store bind variable(user specific)..
+	3. user login information
+	4. sorting 
 		
 
 Background Process:
@@ -47,7 +51,7 @@ Background Process:
 			2. database stop
 			3. if db buffer full and new request come then dirty buffer write  into datafile.
 			
-		unused -> pinned -> used -> Dirty (afetr commit) -> clean 	
+			
 			
 	4. LGWR
 		1.Every 3 sec.
