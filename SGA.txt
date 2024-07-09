@@ -81,6 +81,12 @@ Background Process:
 		2. DB shutdown.
 		3. tablespace offline/online, backup initiated.
 
+	6. ARC:
+	1. It will generate offline redolog file in specified location.
+	2. This will be done only if db is archivelog mode.
+`	Event when ARC happen:
+		1. When swithc log. 
+
 	MMAN(Memory Manager):
 		1. This process manages the shared memory and automatic memory allocation in the db.
 			dynamically adjust the size of the SGA components.
