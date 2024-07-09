@@ -1,13 +1,14 @@
-SGA: 
+Server Process: It is process which work on behalf of user..
 
+SGA: It is shared memory, shared among all user and process..It contain following components.
 Shared pool:  
-	
-	1. Data dictionary cache: contain metadata of database..like how many objects are there, no.of rows etc.
+	1. Data dictionary cache: contain metadata of database..like how many objects are there, no.of rows,
+	   user detail, table details, user privilege etc.
 	2. Library cache: sql syntax, semantics check here..and generate plan hash value..
 	
 Database Buffer cache:
 	
-	1. It's contain actual copy of data block from data files.
+	1. It store copy of actual data block coming from data file by user queries.
 	2. Data block size can be 2k,4k,8k,16k,32k.. default size 8k
 
 	Different Buffer status:
@@ -16,13 +17,23 @@ Database Buffer cache:
 
 Redlog Buffer Cache:
 
-	1. It contain all the changes of database goes here..
+	1. It store redo entries copy. All the changes made into the db goes into redo entries.
+	2. It use for instance recovery.
 	1. It contain SCN, Timestamp, old and new image value.
 
+Java Pool:
+	All java procedure and code of java application running on oracle dba software.
+
+Large Pool:
+	It use at the time of Rman backup.
+
+Stream Pool:
+	use for replication purpose.
+
 PGA:
-	1. it's private 
+	1. it's private..Non shared memory, dedicated to each server process to perform execution of sql satatment.
 	2. it's store bind variable(user specific)..
-	3. user login information
+	3. session information
 	4. sorting 
 		
 
@@ -58,7 +69,7 @@ Background Process:
 		2. 1/3rd full.
 		3. Checkpoint.
 		4. Switch log.
-		5. DB stop
+		5. DB Shutdown.
 		6. 1Mb redo generated.
 		
 	5. CKPT
@@ -66,9 +77,12 @@ Background Process:
 		1. Update SCN between datafile and controlfile header.
 		
 		When
-			1. Manually Checkpoint
-			2. DB Stop.
+			1. Manually Checkpoint 
+			2. DB shutdown.
 			3. tablespace offline/online, backup initiated.
+
+SQL> alter system checkpoint ---> Manual checkpoint
+SQL> alter system switch logfike ---> Switch logfile
 		
 		
 	
