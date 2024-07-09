@@ -55,16 +55,18 @@ Background Process:
 		3. it's system level cleanup duties.
 		
 	3. DBWR (Database Writer)
-	
-		1. commited data write into datafile.
-			when write:
-			1. checkpoint
-			2. database stop
-			3. if db buffer full and new request come then dirty buffer write  into datafile.
-			
+	   It's writes dirty block in the buffer cache to the datafiles.
+	   Event when DBWR happen:
+		when write:
+		1. checkpoint
+		2. database stop
+		3. if db buffer full and new request come then dirty buffer write  into datafile.
+		
 			
 			
 	4. LGWR
+	It writing redolog buffer entries to a redo log file on disk.
+	Event when LGWR happen:
 		1.Every 3 sec.
 		2. 1/3rd full.
 		3. Checkpoint.
@@ -73,13 +75,21 @@ Background Process:
 		6. 1Mb redo generated.
 		
 	5. CKPT
+	Update SCN between datafile and controlfile header.
+	Event when CKPT happen:
+		1. Manually Checkpoint 
+		2. DB shutdown.
+		3. tablespace offline/online, backup initiated.
 
-		1. Update SCN between datafile and controlfile header.
-		
-		When
-			1. Manually Checkpoint 
-			2. DB shutdown.
-			3. tablespace offline/online, backup initiated.
+	MMAN(Memory Manager):
+		1. This process manages the shared memory and automatic memory allocation in the db.
+			dynamically adjust the size of the SGA components.
+
+	MMON(Manageability Monitor):
+		1. This process is responsible for managing & monitor the db performance, including AWR & ADDM.
+
+
+NOTE:
 
 SQL> alter system checkpoint ---> Manual checkpoint
 SQL> alter system switch logfike ---> Switch logfile
