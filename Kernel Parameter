@@ -15,7 +15,7 @@ net.ipv4.ip_local_port_range  --> This parameter defines the range of port numbe
 net.core.rmem_default         --> default receive socket buffer size for all protocols.
 net.core.rmem_max             --> the max receive socket buffer size for all protocols.
 net.core.wmem_default         --> default send socket buffer size for all protocols.
-net.core.wmem_max             --> the max receive socket buffer size for all protocols.
+net.core.wmem_max             --> the max send socket buffer size for all protocols.
 fs.aio-max-nr                 --> Max no of asynchronous I/O operation that can be queued in system.
 
 EX:
