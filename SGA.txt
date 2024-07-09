@@ -1,10 +1,10 @@
 Server Process: It is process which work on behalf of user..
 
-SGA: It is shared memory, shared among all user and process..It contain following components.
-Shared pool:  
+SGA: It is shared memory, shared among with all user and process..It contain following components.
+Shared pool:  It contain two sub pool.
 	1. Data dictionary cache: contain metadata of database..like how many objects are there, no.of rows,
 	   user detail, table details, user privilege etc.
-	2. Library cache: sql syntax, semantics check here..and generate plan hash value..
+	2. Library cache: sql syntax, semantics check here..and generate plan hash value of sql query..
 	
 Database Buffer cache:
 	
