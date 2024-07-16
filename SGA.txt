@@ -43,10 +43,13 @@ Background Process:
 	
 	1. PMON (Process Monitor): 	
 		1. it's monitor user process and all other background process.
-		    and if any process not working then it will try restart.
+		    and if any process not working then it will try to restart.
 
 		2. Perform the process allocation and releasr resources (which taken by users).
 		3. releas lock.
+		4. register listener with db.
+		5. session recovery (rollback)
+			Ex: suppose if user performing dml operation..and instance crash then it will rollback that transaction.
 		
 	
 	2. SMON (System/Super Monitor):
