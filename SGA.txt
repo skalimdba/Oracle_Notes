@@ -55,7 +55,6 @@ Background Process:
 	2. SMON (System/Super Monitor):
 		1. instance recovery when instance crash happened.
 		2. free temporary tablespace.
-		3. it's system level cleanup duties.
 		
 	3. DBWR (Database Writer)
 	   It's writes dirty block in the buffer cache to the datafiles.
@@ -73,9 +72,8 @@ Background Process:
 		1.Every 3 sec.
 		2. 1/3rd full.
 		3. Checkpoint.
-		4. Switch log.
-		5. DB Shutdown.
-		6. 1Mb redo generated.
+		4. DB Shutdown.
+		5. 1Mb redo generated.
 		
 	5. CKPT
 	Update SCN between datafile and controlfile header.
