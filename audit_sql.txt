@@ -1,0 +1,98 @@
+select username, to_char(timestamp,'MM/DD/YY HH24:MI') Timestamp,obj_name, 
+action_name, sql_text from dba_audit_trail where username = 'KSHELTON';
+
+
+
+dba_audit_trail;
+DBA_PRIV_AUDIT_OPTS;
+
+audit_unified_policies
+unified_audit_trail
+
+parameter--> UNIFIED_AUDIT_SGA_QUEUE_SIZE
+
+AUDIT_ADMIN
+AUDIT_VIEWER
+
+
+ noaudit select on alim.department ;
+ noaudit all by alim;
+ 
+ 
+ audit all by alim;
+ audit drop any table by alim;
+ audit create table by alim;
+ 
+ audit alter on alim.emp;
+ audit update on alim.emp;
+ audit delte on alim.emp;
+ audit select on alim.emp;
+ audit insert on alim.emp;
+ 
+
+
+by access --> default
+by session --> we have to explicitluy
+
+
+
+create audit policy kiran_audit_policy
+privileges create table, create sequence
+when  'sys_context(''userenv'', ''session_user'') = ''KIRAN'''
+evaluate per session
+container = current;
+
+
+
+create audit policy test_policy
+actions delete on alim.emp,
+insert on  alim.emp,
+update on  alim.emp,
+select on  alim.emp
+when    'sys_context(''userenv'', ''session_user'') = ''SATYAM''' 
+evaluate per session 
+container = current;
+
+
+
+create audit policy alim_policy
+actions delete, insert, update, select
+when    'sys_context(''userenv'', ''session_user'') = ''alim'''
+evaluate per session
+container = current ;
+ 
+ 
+create audit policy create_table_role_policy
+roles create_table_role
+when    'sys_context(''userenv'', ''session_user'') = ''test'''
+evaluate per session
+container = current ;
+
+ 
+create audit policy test_policy2
+actions all on alim.emp
+WHEN 'sys_context(''userenv'', ''session_user'') IN ''SATYAM,KIRAN'''
+evaluate per session
+container = current
+
+
+EXEC DBMS_AUDIT_MGMT.flush_unified_audit_trail;
+
+
+CREATE GLOBAL TEMPORARY TABLE temp_table_example2 (
+    id NUMBER,
+    name VARCHAR2(50)
+) tablespace tmp,
+ ON COMMIT PRESERVE ROWS;
+
+
+HR
+SATYAM
+JUNED
+HASAN
+SANKET
+XYZ
+ALIM
+TEST
+KIRAN
+MAHESH
