@@ -26,7 +26,7 @@ Oracle installation Pre requisite:
 		2)kernel parameter  (/etc/sysctl.conf)
 		
 			fs.file-max = 6815744          	
-			kernel.sem = 250 32000 100 128
+			kernel.sem = 250 32000 100 128   MSL MNS OPM MNI
 			kernel.shmmni = 4096				(in bytes)
 			kernel.shmall = 1073741824			(in pages)
 			kernel.shmmax = 4398046511104		(in bytes)
