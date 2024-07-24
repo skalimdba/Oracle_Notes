@@ -32,10 +32,38 @@ Stream Pool:
 
 PGA:
 	1. it's private..Non shared memory, dedicated to each server process to perform execution of sql satatment.
+	2. one PGA exist for each server process & BG process.
+	3. It is a memory heap that contain session dependant variables.
 	2. it's store bind variable(user specific)..
 	3. session information
 	4. sorting 
-		
+
+	Contents of tha PGA:
+	1. SQL work Area
+	2. Session Memory
+	3. Private SQL Area
+
+	SQL Work Area:
+
+	1. Sort Area: A sort operator uses the sort area to sort a set of rows.
+	2. Hash Area: A hash join operator uses a hase area to build a hash table.
+	3. Bitmap Merge Area: A bitmap merge uses the bitmap merge area to merge data retrieved from scans of multiple 		   bitmap indexes.
+
+	Private SQL Area:
+	 -Hold information about parsed SQL statemnent & other session specific information for processing.
+	 -when a SP excecutes SQL or PL/SQL code, the process uses the private SQL area to store bind variable.
+	1.The Run time Area:
+		- This area contains query execution state information. E.g Track the no.of rows retreived so far
+		- Oracle creates the run time area as the first step of an execution request.
+		- For DML statement, the run time area is freed when the SQL statement is created.
+
+	2. Persistent Area:
+		- This area contains bind variable values.
+		- Persistent area is freed only when the cusror is closes.
+
+UGA:
+   1. UGA is session memory.
+
 
 Background Process:
 
@@ -49,7 +77,8 @@ Background Process:
 		3. releas lock.
 		4. register listener with db.
 		5. session recovery (rollback)
-			Ex: suppose if user performing dml operation..and instance crash then it will rollback that transaction.
+			Ex: suppose if user performing dml operation..and instance crash then it will rollback that 	v 
+                          transaction.
 		
 	
 	2. SMON (System/Super Monitor):
