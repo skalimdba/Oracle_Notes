@@ -62,7 +62,10 @@ PGA:
 		- Persistent area is freed only when the cusror is closes.
 
 UGA:
-   1. UGA is session memory.
+   1. The UGA is session memory, which is memory allocated for session variables, such as logon information.
+   2. The UGA cannot be stored in the PGA when using a shared server connection because the PGA is specific to a single process
+   3. UGA is stored in the SGA when using shared server connections.
+   4. UGA is stored in PGA when using a dedicated server.
 
 
 Background Process:
