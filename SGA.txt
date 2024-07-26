@@ -80,8 +80,7 @@ Background Process:
 		3. releas lock.
 		4. register listener with db.
 		5. session recovery (rollback)
-			Ex: suppose if user performing dml operation..and instance crash then it will rollback that 	v 
-                          transaction.
+			Ex: suppose if user performing dml operation..and instance crash then it will rollback that transaction.
 		
 	
 	2. SMON (System/Super Monitor):
