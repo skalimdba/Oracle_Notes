@@ -1,1 +1,65 @@
+--------------------------------------------------------Physical------------------------------------------------------------------------
 
+Oracle Database Physcial structures are divided into following files:
+Physcial means which present in OS level..and we can see that files.
+
+1. Parameter file
+2. Control file
+3. Redo log file
+4. Datafile
+5. Archive log file
+6. Password file
+7. listener file
+8. Alert file
+
+1. Parameter File:
+    1. Parameter file contain initialization parameter which contain the following parameter
+        1. dbname
+        2. db block size 
+        3. control file location
+        4. sga and pga size
+        5. shared pool, large pool, stream pool,buffer size
+        6. audit file location
+        7. diagnostic_dest location
+        8. recovery file dest location and size
+        9. service name
+        10. undo tablespace name
+
+    2. This parameter file read during database startup and instance configured and background process start..
+        this happen on nomount stage.. as database has 3 stages..Nomount --> Mount --->Open
+
+    3. Parameter file have 2 types: 1) pfile   2) spfile
+        The default location of parameter file is $ORACLE_HOME/dbs
+        if both are present then oracle prefer spfile.
+
+        if our pfile have on different location..then we have to mention path while startup
+        e.g startup pfile='/oracle/app/oracle/product/19.0.0/dbhome_1/dbs/initprod.ora';
+  
+        1. pfile: 
+            1. it is text file..and name convention is init<ORACLE_SID>.ora    eg: initprod.ora
+            2. if we need to change any parameter we need to shutdown database and manually edit pfile by any editor like vi..
+
+        2. spfile
+            1. it is binary file and name convention is spfile<ORACLE_SID>.ora   eg: spfileprod.ora
+            2. if we need to change any parameter we can do by alter command..
+                e.g: alter system set [parameter_name]=value scope=spfile/memory/both
+
+            3. scope value depend on ISSYS_MODIFIABLE value ..
+                ISSYS_MODIFIABLE:
+                  FALSE -> the scope of this parameter is spfile only..so we need to restart database to reflect parameter.
+                  IMMEDIATE -> the scope of this parameter is both.. so no needt to restart database to reflect parameter.
+
+2. control file
+
+  1. control file is a small binary file which contain the database structure related inforamtion like:
+      1. dbname
+      2. redo log file name and location
+      3. datafile name and location
+      4. checkpoint information (SCN)
+      5. RMAN backup information
+      6. The current log sequence number
+      7. The timestamp of the database creation
+
+
+          
+                  
