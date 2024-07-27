@@ -130,7 +130,7 @@ Background Process:
 NOTE:
 
 SQL> alter system checkpoint ---> Manual checkpoint
-SQL> alter system switch logfike ---> Switch logfile
+SQL> alter system switch logfile ---> Switch logfile
 		
 		
 	
