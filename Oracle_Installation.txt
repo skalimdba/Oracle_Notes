@@ -145,7 +145,7 @@ Manual Setup:
 		File Structure:
 			1) ORACLE_HOME
 			
-				#chown oracle:oinstall /oracle/			
+				#chown -R oracle:oinstall /oracle/			
 				$mkdir -p /oracle/app/oracle/product/19.0.0/dbhome_1
 				$chmod -R 775 /oracle/
 
