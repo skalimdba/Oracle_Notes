@@ -2,16 +2,17 @@ Oracle installation Pre requisite:
 
 1)Automatic Setup:
 
-	oracle-database-preinstall-19c package installation:
+	oracle-database-preinstall-19c package installation.. it will download rpm and install rpm
 
 	# yum install -y oracle-database-preinstall-19c
 	----------------------------------------------------------------------------------------------------------------------------------
 
-	if abovoe command not working..then do following command:
+	if abovoe command not working..then do following command to download rpm..
 	-----------------------------For CentOS7--------------------------------------------------------------
 	# curl -o oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm 
 	https://yum.oracle.com/repo/OracleLinux/OL7/latest/x86_64/getPackage/oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm
 
+	------For install rpm locally-----------
 	# yum -y localinstall oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm
 		or
 	# rpm -ivh oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm
