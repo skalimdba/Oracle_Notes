@@ -80,7 +80,7 @@ Oracle installation Pre requisite:
 		
 				ORACLE_HOME
 				mkdir -p /oracle/app/oracle/product/19.0.0/dbhome_1
-				chown oracle:oinstall /oracle/			
+				chown -R oracle:oinstall /oracle/			
 				chmod -R 775 /oracle/
 
 		
