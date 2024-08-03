@@ -8,15 +8,20 @@ Oracle installation Pre requisite:
 	----------------------------------------------------------------------------------------------------------------------------------
 
 	if abovoe command not working..then do following command:
-
+	-----------------------------For CentOS7--------------------------------------------------------------
 	# curl -o oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm 
 	https://yum.oracle.com/repo/OracleLinux/OL7/latest/x86_64/getPackage/oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm
 
 	# yum -y localinstall oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm
 		or
 	# rpm -ivh oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm
+	---------------------------For CentOS8------------------------------------------------------------------
+	#curl -o oracle-database-preinstall-19c-1.0-2.el8.x86_64.rpm 			 
+        https://yum.oracle.com/repo/OracleLinux/OL8/appstream/x86_64/getPackage/oracle-database-preinstall-19c-1.0-2.el8.x86_64.rpm
 
-	-------------------------------------------------------------------------------------------------------------------------------------
+         #dnf -y localinstall oracle-database-preinstall-19c-1.0-2.el8.x86_64.rpm
+
+	--------------------------------------------------------------------------------------------------------------------------------
 
 	--->This package perform all prerequisite by issue abovoe command.
 		1)user and group creation
