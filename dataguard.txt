@@ -1,0 +1,132 @@
+
+---------------------------------------------------------Dataguard---------------------------------------------------------
+
+Physical -> block by block replication [Mount mode]
+Active Dataguard -> read only mode..[used for reporting purpose, to reduce load on production]
+Logical  -> SQL apply replication..[use for specific object] replication
+snapshot -> read write mode..
+
+
+Dataguard Mode:
+1. Maximum Performance (Default) --work in Async manner..prod will not wait for acknowledgment. [more data loss]
+
+2. Maximum Availability---it is sync manner..production db wait for acknowledgment till time set defined 
+							and will automatically switch to performance mode. [less data loss compare to performance]
+							
+3. Maximum Protection--it is sync manner prod db wait for acknowledgment ..and will not generate archive on prod and prod goes to hang state..
+						[zero data loss]
+						
+						
+
+DG process:
+
+1. RFS (Remote File Server) - receive archive in DR from production.
+2. MRP (Media Recovery Process) - apply archive to DR from production.		
+3. LNS (Log Network Server)
+
+31 destination can use for archive log..
+
+RFS not working scenario:
+
+	1. listener not working
+	2. archvie mount point full [no space]	
+	3. if server restart then may be firewall start bcoz of firewall may be enable
+	4. if sys password change..orapw[sid] file need to copy to DR site..
+
+
+31 dest archive can set..
+
+fal_server:
+
+MRP->fal_server->Prod
+
+if any archive gap sequence (missing on DR) and if fal_sever is set, then MRP will request to prod to send missing archive log.
+bcoz mrp apply archive in  sequence manner. 
+
+
+
+
+
+PARAMETER:
+
+log_archive_config
+log_archive_dest_1
+log_archive_dest_2
+
+fal_server
+fal_client
+standby_file_management
+
+db_unique_name
+service_names
+
+backup current controlfile for standby format '/oracle/RMAN_BKP/standby_ctl.bkp';
+
+
+
+alter system set log_archive_config='dg_config=(prod,proddr)' scope=both;
+
+ALTER SYSTEM SET log_archive_dest_1='location=/oracle/archivelog valid_for=(all_logfiles,all_roles) db_unique_name=prod' SCOPE=both;
+
+ALTER SYSTEM SET log_archive_dest_2='service=proddr async valid_for=(online_logfiles,primary_role) db_unique_name=proddr' SCOPE=both;
+
+ALTER SYSTEM SET fal_server='proddr' SCOPE=both;
+
+ALTER SYSTEM SET fal_client='prod' SCOPE=both;
+
+ALTER SYSTEM SET standby_file_management='MANUAL' SCOPE=both;
+
+ALTER SYSTEM SET LOG_ARCHIVE_DEST_STATE_2=DEFER scope=both;
+
+
+ALTER SYSTEM SET DB_FILE_NAME_CONVERT='/oracle/app/oracle/oradata/PROD/datafile/','/oracle/app/oracle/oradata/PRODDR/datafile/' SCOPE=SPFILE;
+
+
+ALTER SYSTEM SET LOG_FILE_NAME_CONVERT='/oracle/app/oracle/oradata/PROD/onlinelog/','/oracle/app/oracle/oradata/PRODDR/onlinelog/' SCOPE=SPFILE;
+
+
+select dest_id,error from v$archive_dest where dest_id=2;
+
+
+db_name
+db_unique_name;
+
+
+select max(sequence#) from v$archived_log;
+
+
+
+restore standby controlfile from service prod;
+
+v$archive_dest   -->dest_id,error
+
+selectt 
+v$managed_standby --->process,status
+
+
+ping ip addr
+telnet ip 1521
+wchich telnet
+wchihc nc
+
+nc -vz ip addr
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
