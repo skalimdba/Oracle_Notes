@@ -7,7 +7,7 @@ Step 1: Check network connectivity between Prod and DR/Standby.
 	On Prod:	
 		ping [ip of DR]
 		nc -vz [ip of DR] [port No]   Ex: nc -vz 192.168.10.21 1521	
-		or telnet 192.168.10.11 1521
+		or telnet 192.168.10.21 1521
 	
 	On DR:
 		ping [ip of Prod]
@@ -42,7 +42,7 @@ Step 2: add tnsenrty on both machine (PROD &DR ) to $ORACLE_HOME/network/admin/t
 
 		prod =
 		  (DESCRIPTION=
-			(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.10.21)(PORT = 1521)
+			(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.10.11)(PORT = 1521)
 		  )
 		  (CONNECT_DATA =
 			(SERVICE_NAME=prod)
