@@ -190,9 +190,10 @@ Step 12:  restore control file & database in DR..
 -----------------------------------------------------------------------------------------------------------------------
 
 	SQ>  select dest_id,error from v$archive_dest where dest_id=2;    -->run on prod to check if any error..
+
+PR:   SQL> alter system switch logfile;  		--> To switch logfile 
 	
-	
-	RUN on both machine:
+  RUN on both machine:
 	SQL> select d.name,i.instance_name,i.host_name,d.OPEN_MODE,d.DATABASE_ROLE,d.SWITCHOVER_STATUS from v$database d,v$instance i; 
 	
 	SQL>	select max(sequence#) from v$archived_log;
@@ -200,7 +201,7 @@ Step 12:  restore control file & database in DR..
 	
 	
 	
-	DR:
+  DR:
 	SQL>  	alter database recover managed standby database disconnect from session;   --> To start MRP processs
 	SQL>    select process,status v$managed_standby;
 	SQL>  	alter database recover managed standby database cancel;   --> To stop MRP processs
