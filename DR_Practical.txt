@@ -59,9 +59,8 @@ Step 2: add tnsenrty on both machine (PROD &DR ) to $ORACLE_HOME/network/admin/t
 		 )
 				
 	
-	
-	ping prod
-	ping proddr
+ tnsping prod
+ tnsping proddr
 	
 		
 	
