@@ -98,6 +98,8 @@ Step 8: Production Parameter changes value:
 		1. alter system set log_archive_config='dg_config=(prod,proddr)' scope=both;
 		3. alter system set log_archive_dest_1='location=/oracle/archivelog valid_for=(all_logfiles,all_roles) db_unique_name=prod' SCOPE=both;
 		3. alter system set log_archive_dest_2='service=proddr async valid_for=(online_logfiles,primary_role) db_unique_name=proddr' SCOPE=both;
+   ---> here service is tns alias of DR server..
+
 		4. alter system set LOG_ARCHIVE_DEST_STATE_2=ENABLE scope=both;
 			
 
@@ -113,8 +115,11 @@ Step 9: rename pfile and edit pfile.
 		
 
 Step 10: afetr edit pfile..create the all directory on OS level which mention in pfile		
+Step 11: rename password file as per oracle_sid
+	 cd $ORACLE_HOME/dbs
+	 mv orapwprod orapwproddr
 		
-Step 11: export ORACLE_SID=proddr;
+Step 12: export ORACLE_SID=proddr;
 		SQL>	startup nomount pfile;
 		SQL>	create spfile from pfile;
 		SQL> 	shut abort;
