@@ -99,8 +99,10 @@ Step 8: Production Parameter changes value:
 			--> here we need to mention db_unique_name of production and all DR..
 
 		3. alter system set log_archive_dest_1='location=/oracle/archivelog valid_for=(all_logfiles,all_roles) db_unique_name=prod' SCOPE=both;
+			--> here mention archivelog location where production archive will generate..
+
 		3. alter system set log_archive_dest_2='service=proddr async valid_for=(online_logfiles,primary_role) db_unique_name=proddr' SCOPE=both;
-   ---> here service is tns alias of DR server..
+		--> here mention archive location of DR where production archive will be send..and service is tns alias of DR..
 
 		4. alter system set LOG_ARCHIVE_DEST_STATE_2=ENABLE scope=both;
 			
