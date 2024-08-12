@@ -4,12 +4,26 @@
 
 Step 1: Check network connectivity between Prod and DR/Standby.
 
-	On Prod:	
+	On Prod:
+		Check firewall service .it's must be disbale 
+		root #: systemctl status firewalld
+			if it is active or enable..
+		root #: systemctl stop firewalld
+		root #: systemctl disable firewalld
+		
+	
 		ping [ip of DR]
 		nc -vz [ip of DR] [port No]   Ex: nc -vz 192.168.10.21 1521	
 		or telnet 192.168.10.21 1521
 	
 	On DR:
+
+		Check firewall service .it's must be disbale 
+		root #: systemctl status firewalld
+			if it is active or enable..
+		root #: systemctl stop firewalld
+		root #: systemctl disable firewalld
+
 		ping [ip of Prod]
 		nc -vz [ip of Prod] [port No]   Ex: nc -vz 192.168.10.11 1521	
 		or telnet 192.168.10.11 1521
