@@ -1,0 +1,176 @@
+
+
+----------------------------------------------------------DR PRACTICAL----------------------------------------------------------
+
+Step 1: Check network connectivity between Prod and DR/Standby.
+
+	On Prod:	
+		ping [ip of DR]
+		nc -vz [ip of DR] [port No]   Ex: nc -vz 192.168.10.21 1521	
+		or telnet 192.168.10.11 1521
+	
+	On DR:
+		ping [ip of Prod]
+		nc -vz [ip of Prod] [port No]   Ex: nc -vz 192.168.10.11 1521	
+		or telnet 192.168.10.11 1521
+		
+
+Step 2: add tnsenrty on both machine (PROD &DR ) to $ORACLE_HOME/network/admin/tnsnames.ora  & Check connectivity.
+	
+	Prodcution Server:	
+
+		prod =
+		  (DESCRIPTION=
+			(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.10.11)(PORT = 1521)
+		  )
+		  (CONNECT_DATA =
+			(SERVICE_NAME=prod)
+		  )
+		 )
+		 
+		proddr =
+		  (DESCRIPTION=
+			(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.10.21)(PORT = 1521)
+		  )
+		  (CONNECT_DATA =
+			(SERVICE_NAME=proddr)
+		  )
+		 )
+				
+		
+	DR Server:	
+
+		prod =
+		  (DESCRIPTION=
+			(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.10.21)(PORT = 1521)
+		  )
+		  (CONNECT_DATA =
+			(SERVICE_NAME=prod)
+		  )
+		 )
+		 
+		proddr =
+		  (DESCRIPTION=
+			(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.10.21)(PORT = 1521)
+		  )
+		  (CONNECT_DATA =
+			(SERVICE_NAME=proddr)
+		  )
+		 )
+				
+	
+	
+	ping prod
+	ping proddr
+	
+		
+	
+
+Step 3: Archivelog should be enable on production
+	
+	SQL>  select LOG_MODE,FORCE_LOGGING from v$database;
+		
+Step 4: force_logging should be  'YES'
+		if force_logging NO
+		
+	SQL>  alter database force logging;   ---> to make it enable..
+
+
+Step 5: Create pfile in production
+
+	SQL>  create pfile from spfile;
+
+Step 6: Create standby control file and send to DR Server.
+		RMAN>	backup current controlfile for standby format '/oracle/RMAN_BKP/standby_ctl.bkp';
+		
+		scp tandby_ctl.bkp oracle@192.168.10.21:/oracle/BKP/
+
+Step 7: Send pfile and password file to DR.
+		
+	cd $ORACLE_HOME/dbs
+	
+	scp orapwprod initprod.ora oracle@192.168.10.21:/oracle/app/oracle/product/19.0.0/dbhome_1/dbs/
+
+
+Step 8: Production Parameter changes value:
+
+		SQL> 
+		
+		1. alter system set log_archive_config='dg_config=(prod,proddr)' scope=both;
+		3. alter system set log_archive_dest_1='location=/oracle/archivelog valid_for=(all_logfiles,all_roles) db_unique_name=prod' SCOPE=both;
+		3. alter system set log_archive_dest_2='service=proddr async valid_for=(online_logfiles,primary_role) db_unique_name=proddr' SCOPE=both;
+		4. alter system set LOG_ARCHIVE_DEST_STATE_2=ENABLE scope=both;
+			
+
+Step 9: rename pfile and edit pfile.
+		mv initprod.ora initproddr.ora	
+		vi initproddr.ora
+		:%/s/prod/proddr then press enter
+		
+		db_name should be same as prod database ----> prod
+		db_unique_name must be different 		---> proddr
+		
+		and change directory path according to your location ..and save this file..
+		
+
+Step 10: afetr edit pfile..create the all directory on OS level which mention in pfile		
+		
+Step 11: export ORACLE_SID=proddr;
+		SQL>	startup nomount pfile;
+		SQL>	create spfile from pfile;
+		SQL> 	shut abort;
+		SQL>	startup
+		
+		DR change some parameter value:
+	SQL> 
+	
+		1. alter system set service_names = 'proddr' scope = both;
+		2. alter system set log_archive_config='dg_config=(prod,proddr)' scope=both;
+		3. alter system set log_archive_dest_1='location=/oracle/archivelog valid_for=(all_logfiles,all_roles) db_unique_name=proddr' SCOPE=both;
+		4. alter system set LOG_ARCHIVE_DEST_STATE_2=DEFER scope=both;
+		5. alter system set DB_FILE_NAME_CONVERT='/oracle/app/oracle/oradata/PROD/datafile/','/oracle/app/oracle/oradata/PRODDR/datafile/' SCOPE=SPFILE;
+		5. alter system set LOG_FILE_NAME_CONVERT='/oracle/app/oracle/oradata/PROD/onlinelog/','/oracle/app/oracle/oradata/PRODDR/onlinelog/' SCOPE=SPFILE;
+		
+		
+		SQL> shut immediate;
+		SQL> startup nomount
+		
+		RMAN>	restore standby controlfile from service prod;   ---> here prod is tnsalias of prodcutin database..
+		RMAN>	alter database mount;
+		
+		RMAN>	restore database from service prod;				 ---> here prod is tnsalias of prodcutin database..
+		
+		
+
+	SQ>  select dest_id,error from v$archive_dest where dest_id=2;    -->run on prod to check if any error..
+	
+	
+	RUN on both machine:
+	SQL>	select d.name,i.instance_name,i.host_name,d.OPEN_MODE,d.DATABASE_ROLE,d.SWITCHOVER_STATUS from v$database d,v$instance i; 
+	
+	SQL>	select max(sequence#) from v$archived_log;
+	SQL>	select max(sequence#) from v$archived_log where applied='YES';	
+	
+	
+	
+	DR:
+	SQL>  	alter database recover managed standby database disconnect from session;   --> To start MRP processs
+	SQL>    select process,status v$managed_standby;
+	SQL>  	alter database recover managed standby database cancel;   --> To stop MRP processs
+	
+
+
+VIEW:
+
+v$archive_dest
+v$archived_log
+v$managed_standby
+v$instance
+v$database
+	
+
+
+		
+
+		
+		
