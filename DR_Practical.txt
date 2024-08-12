@@ -96,7 +96,7 @@ Step 5: Create pfile in production
 Step 6: Create standby control file and send to DR Server.
 		RMAN>	backup current controlfile for standby format '/oracle/RMAN_BKP/standby_ctl.bkp';
 		
-		scp tandby_ctl.bkp oracle@192.168.10.21:/oracle/BKP/
+		scp standby_ctl.bkp oracle@192.168.10.21:/oracle/BKP/
 
 Step 7: Send pfile and password file to DR.
 		
