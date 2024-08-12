@@ -93,20 +93,17 @@ Step 5: Create pfile in production
 
 	SQL>  create pfile from spfile;
 
-Step 6: Create standby control file and send to DR Server.
-		RMAN>	backup current controlfile for standby format '/oracle/RMAN_BKP/standby_ctl.bkp';
-		
-		scp standby_ctl.bkp oracle@192.168.10.21:/oracle/BKP/
 
-Step 7: Send pfile and password file to DR.
+Step 6: Send pfile and password file to DR.
 		
 	cd $ORACLE_HOME/dbs
 	
 	scp orapwprod initprod.ora oracle@192.168.10.21:/oracle/app/oracle/product/19.0.0/dbhome_1/dbs/
 
 
-Step 8: Production Parameter changes value:
+Step 7: Production Parameter changes value:
 
+PROD:
 		SQL> 
 		
 		1. alter system set log_archive_config='dg_config=(prod,proddr)' scope=both;
@@ -121,10 +118,10 @@ Step 8: Production Parameter changes value:
 		4. alter system set LOG_ARCHIVE_DEST_STATE_2=ENABLE scope=both;
 			
 
-Step 9: rename pfile and edit pfile.
+Step 8: rename pfile and edit pfile.
 		mv initprod.ora initproddr.ora	
 		vi initproddr.ora
-		:%/s/prod/proddr then press enter
+		:%s/prod/proddr then press enter
 		
 		db_name should be same as prod database ----> prod
 		db_unique_name must be different 		---> proddr
@@ -132,12 +129,12 @@ Step 9: rename pfile and edit pfile.
 		and change directory path according to your location ..and save this file..
 		
 
-Step 10: afetr edit pfile..create the all directory on OS level which mention in pfile		
-Step 11: rename password file as per oracle_sid
+Step 9: afetr edit pfile..create the all directory on OS level which mention in pfile		
+Step 10: rename password file as per oracle_sid
 	 cd $ORACLE_HOME/dbs
 	 mv orapwprod orapwproddr
 		
-Step 12: export ORACLE_SID=proddr;
+Step 11: export ORACLE_SID=proddr;
 		SQL>	startup nomount pfile;
 		SQL>	create spfile from pfile;
 		SQL> 	shut abort;
@@ -159,23 +156,44 @@ Step 12: export ORACLE_SID=proddr;
 		7. alter system set LOG_FILE_NAME_CONVERT='/oracle/app/oracle/oradata/PROD/onlinelog/','/oracle/app/oracle/oradata/PRODDR/onlinelog/' SCOPE=SPFILE;
 		--> this parameter used if RROD logifile location and DR logifile location is different.
 
-		
-		
-		SQL> shut immediate;
-		SQL> startup nomount
-		
-		RMAN>	restore standby controlfile from service prod;   ---> here prod is tnsalias of prodcutin database..
-		RMAN>	alter database mount;
-		
-		RMAN>	restore database from service prod;				 ---> here prod is tnsalias of prodcutin database..
-		
-		
+
+Step 12:  restore control file & database in DR..
+
+
+	SQL> shut immediate;
+	SQL> startup nomount
+
+	we can restore database by service or by backup 
+------------------------------by service-------------------------------------------------
+	RMAN>	restore standby controlfile from service prod;   ---> here prod is tnsalias of prodcutin database..
+	RMAN>	alter database mount;
+	
+	RMAN>	restore database from service prod;		---> here prod is tnsalias of prodcutin database..
+
+-------------------------------------by backup file from prod----------------------
+	PROD:
+		RMAN> backup database format '/oracle/RMAN_BKP/full_%d_%T_%u';
+		RMAN> backup current controlfile for standby format '/oracle/RMAN_BKP/standby_ctl.bkp';
+			cd /oracle/RMAN_BKP/
+			
+		scp * oracle@192.168.10.21:/oracle/RMAN_BKP/
+
+	DR: 
+		rman auxiliary /
+		RMAN>
+		run{
+		allocate channel c1 device type disk;
+		allocate channel c2 device type disk;
+		duplicate target database for standby backup location '/oracle/RMAN_BKP/' nofilenamecheck;
+		}
+
+-----------------------------------------------------------------------------------------------------------------------
 
 	SQ>  select dest_id,error from v$archive_dest where dest_id=2;    -->run on prod to check if any error..
 	
 	
 	RUN on both machine:
-	SQL>	select d.name,i.instance_name,i.host_name,d.OPEN_MODE,d.DATABASE_ROLE,d.SWITCHOVER_STATUS from v$database d,v$instance i; 
+	SQL> select d.name,i.instance_name,i.host_name,d.OPEN_MODE,d.DATABASE_ROLE,d.SWITCHOVER_STATUS from v$database d,v$instance i; 
 	
 	SQL>	select max(sequence#) from v$archived_log;
 	SQL>	select max(sequence#) from v$archived_log where applied='YES';	
