@@ -96,6 +96,8 @@ Step 8: Production Parameter changes value:
 		SQL> 
 		
 		1. alter system set log_archive_config='dg_config=(prod,proddr)' scope=both;
+			--> here we need to mention db_unique_name of production and all DR..
+
 		3. alter system set log_archive_dest_1='location=/oracle/archivelog valid_for=(all_logfiles,all_roles) db_unique_name=prod' SCOPE=both;
 		3. alter system set log_archive_dest_2='service=proddr async valid_for=(online_logfiles,primary_role) db_unique_name=proddr' SCOPE=both;
    ---> here service is tns alias of DR server..
@@ -130,10 +132,16 @@ Step 12: export ORACLE_SID=proddr;
 	
 		1. alter system set service_names = 'proddr' scope = both;
 		2. alter system set log_archive_config='dg_config=(prod,proddr)' scope=both;
+			--> here we need to mention db_unique_name of production and all DR..
+
 		3. alter system set log_archive_dest_1='location=/oracle/archivelog valid_for=(all_logfiles,all_roles) db_unique_name=proddr' SCOPE=both;
 		4. alter system set LOG_ARCHIVE_DEST_STATE_2=DEFER scope=both;
 		5. alter system set DB_FILE_NAME_CONVERT='/oracle/app/oracle/oradata/PROD/datafile/','/oracle/app/oracle/oradata/PRODDR/datafile/' SCOPE=SPFILE;
+
+		--> this parameter used if RROD datafile location and DR datafile location is different.
 		5. alter system set LOG_FILE_NAME_CONVERT='/oracle/app/oracle/oradata/PROD/onlinelog/','/oracle/app/oracle/oradata/PRODDR/onlinelog/' SCOPE=SPFILE;
+		--> this parameter used if RROD logifile location and DR logifile location is different.
+
 		
 		
 		SQL> shut immediate;
