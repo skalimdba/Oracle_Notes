@@ -213,6 +213,13 @@ PR:   SQL> alter system switch logfile;  		--> To switch logfile
 	SQL>  	alter database recover managed standby database cancel;   --> To stop MRP processs
 	
 
+---------------------------------------------Switchover-------------------------------------------------------------------
+
+Switchover means switch database role of PROD to DR , DR to PROD & vice versa.
+before switch over...check connectivity between PROD & DR..(tnsping & ping)
+switch log from prod and check on DR whether it is receiving or not..mrp processing apply or not..
+
+
 
 VIEW:
 
