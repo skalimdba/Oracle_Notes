@@ -149,7 +149,7 @@ SQL>	alter databas move datafile '/u02/boi/datafile/boi/SPACE01.dbf' to '/u02/bo
 
 
 select sum(BYTES)/1024/1024 "SIZE IN MB" from dba_data_files;		---> Physcial size of db
-select sum(BYTES)/1024/1024 "SIZE IN MB" from dba_segments;			---> Logical size of db
+select sum(BYTES)/1024/1024 "SIZE IN MB" from dba_segments;		---> Logical size of db
 
 select sum(BYTES)/1024/1024 "SIZE IN MB" from dba_free_space;		----> Free space
 
