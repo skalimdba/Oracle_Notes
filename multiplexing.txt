@@ -1,0 +1,176 @@
+1) Multiplexing means mirroring/copies..In oracle database we can multiplex of control file and redologfiles..
+2) in 19c we can multiplex of control file upto 5.
+3) so if any copy corrupt then we have corrupted or loss..it will not impact to database.
+
+
+--------------------------------------------------------Controlfile Multiplexing----------------------------------------------
+
+TO check control file location.
+
+SQL> show parameter control_files;
+
+SQL> select name from v$controlfile;
+
+
+Set the control_files path [all the path including old one also]
+
+SQL> alter system set control_files='/u01/app/oracle/oradata/sky/control01.ctl','/u02/multiplexing/control02.ctl' scope=spfile;
+
+	---> we need to restart the db bcoz scope is spfile [static]
+
+after shutdown database..on OS level we need to copy control file to new location (which mention in alter command) by the help of existing controlfile.
+	--->oracle $:   cp /u01/app/oracle/oradata/sky/control01.ctl /u02/multiplexing/control02.ctl
+	
+
+Note: db will not mount if any control files which mention in db are not available on os level..
+
+SQL> startup;
+ 
+SQL> show parameter control_files;
+
+SQL> select name from v$controlfile;
+
+
+--------------------------------------------------------- Redologfile Multiplexing----------------------------------------------------------------------
+
+
+
+set line 200 pages 2000;
+col MEMBER for a50; 
+
+select  a.GROUP#,a.sequence#,a.BYTES/1024/1024,a.MEMBERS,a.STATUS,b.TYPE,b.MEMBER from v$log a,v$logfile b where a.GROUP#=b.GROUP#;	
+
+
+
+How to add group in database
+===========================
+SQL> alter database add logfile group 4 ('/u01/app/oracle/oradata/sky/redo04a.log','/u01/app/oracle/oradata/sky/redo04b.log') size 50m;
+
+SQL> select GROUP#,MEMBER,STATUS from v$logfile;
+
+SQL> select GROUP#,MEMBERS,STATUS,sum(BYTES/1024/1024) from v$log group by GROUP#,MEMBERS,STATUS;
+
+How to add member in group
+==========================
+
+SQL> alter database add logfile member '/u01/app/oracle/oradata/sky/redo03b.log' to group 3;
+
+SQL> select GROUP#,MEMBER,STATUS from v$logfile;
+
+SQL> select GROUP#,MEMBERS,STATUS,sum(BYTES/1024/1024) from v$log group by GROUP#,MEMBERS,STATUS;
+
+
+
+Redologfile group status:
+==========================
+
+there are following status in redolog group:
+
+1) unused   : the group which never used.
+2) current  : the LGWR currently writing to this group.
+3) active   : after logswitch current group will become active.
+4) inactive : after checkpoing this group become inactive.
+
+How to drop group (we can only drop group if it is in inactive/unuse state).
+===========================================================================
+
+SQL>  alter database drop logfile group 4;
+
+SQL> select GROUP#,MEMBERS,STATUS,sum(BYTES/1024/1024) from v$log group by GROUP#,MEMBERS,STATUS;
+
+How to drop member (we can only drop member if it is in inactive/unused  and we can also drop active member if they have more than 1 member)
+===============================================================================================================================================
+
+SQL> alter database drop logfile member '/u01/app/oracle/oradata/sky/redo03b.log';
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+How to rename redologfile 
+=========================
+
+SQL> shut immediate;
+
+$ mv redo02.log redo02z.log
+
+SQL> startup mount;
+
+SQL> alter database rename file '/u01/app/oracle/oradata/sky/redo02.log' to '/u01/app/oracle/oradata/sky/redo02z.log';
+
+SQL> alter database open;
+
+SQL> select GROUP#,MEMBER,STATUS from v$logfile;
+
+How to relocate redologfile
+===========================
+
+SQL> shut immediate;
+
+Make changes to OS level like if you want to move another new directory then you have to first create directory on os level 
+and the move on os level..
+
+oracle$:   mv redo02z.log /u02/multiplexing
+
+SQL> startup mount;
+
+SQL> alter database rename file '/u01/app/oracle/oradata/sky/redo02z.log' to '/u02/multiplexing/redo02z.log';
+
+SQL> alter database open;
+
+SQL> select GROUP#,MEMBER,STATUS from v$logfile;
+
+
+
+How to rename/relocate  datafile
+================================
+
+---first make tablespace offline then make changes on os level
+
+SQL>	select tablespace_name,status from dba_tablespaces;
+SQL>	alter tablespace SPACE read only;   ---> TO make read only
+SQL>	alter tablespace SPACE read write;	---> TO make read write
+SQL>	alter tablespace SPACE offline;		---> TO make offline
+SQL>	alter tablespace SPACE online;		---> TO make online
+
+
+SQL>	alter database rename file '/u02/boi/datafile/boi/SPACE01.dbf' to '/u02/boi/datafile/boi/SPACE01a.dbf';   
+SQL>	alter database rename file '/u02/boi/datafile/boi/SPACE01a.dbf' to '/u01/DATAFILE/SPACE01a.dbf';
+
+
+from 12c we can rename  or move directly without tablespace offline
+
+make sure directory must be exist on os level before execute query..
+
+SQL>	alter databas move datafile '/u02/boi/datafile/boi/SPACE01.dbf' to '/u02/boi/datafile/boi/SPACE01a.dbf';  
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+select sum(BYTES)/1024/1024 "SIZE IN MB" from dba_data_files;		---> Physcial size of db
+select sum(BYTES)/1024/1024 "SIZE IN MB" from dba_segments;			---> Logical size of db
+
+select sum(BYTES)/1024/1024 "SIZE IN MB" from dba_free_space;		----> Free space
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
