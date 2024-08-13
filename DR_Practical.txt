@@ -113,7 +113,7 @@ PROD:
 			--> here mention archivelog location where production archive will generate..
 
 		3. alter system set log_archive_dest_2='service=proddr async valid_for=(online_logfiles,primary_role) db_unique_name=proddr' SCOPE=both;
-		--> here mention archive location of DR where production archive will be send..and service is tns alias of DR..
+		--> here service is tns alias of DR..
 
 		4. alter system set LOG_ARCHIVE_DEST_STATE_2=ENABLE scope=both;
 			
