@@ -172,8 +172,13 @@ Step 12:  restore control file & database in DR..
 
 -------------------------------------by backup file from prod----------------------
 	PROD:
-		RMAN> backup database format '/oracle/RMAN_BKP/full_%d_%T_%u';
-		RMAN> backup current controlfile for standby format '/oracle/RMAN_BKP/standby_ctl.bkp';
+		RMAN>
+		run{
+		allocate  channel c1 device type disk;
+		allocate  channel c2 device type disk;
+		backup database format '/oracle/RMAN_BKP/full_%d_%T_%u';
+		backup current controlfile for standby format '/oracle/RMAN_BKP/standby_ctl.bkp';
+		}
 			cd /oracle/RMAN_BKP/
 			
 		scp * oracle@192.168.10.21:/oracle/RMAN_BKP/
@@ -182,8 +187,8 @@ Step 12:  restore control file & database in DR..
 		rman auxiliary /
 		RMAN>
 		run{
-		allocate channel c1 device type disk;
-		allocate channel c2 device type disk;
+		allocate auxiliary channel c1 device type disk;
+		allocate auxiliary channel c2 device type disk;
 		duplicate target database for standby backup location '/oracle/RMAN_BKP/' nofilenamecheck;
 		}
 
