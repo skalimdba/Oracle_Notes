@@ -219,6 +219,23 @@ Switchover means switch database role of PROD to DR , DR to PROD & vice versa.
 before switch over...check connectivity between PROD & DR..(tnsping & ping)
 switch log from prod and check on DR whether it is receiving or not..mrp processing apply or not..
 
+PR:
+SQL> set line 200 pages 200;
+SQL> select d.name,i.instance_name,i.host_name,d.OPEN_MODE,d.DATABASE_ROLE,d.log_mode,d.CONTROLFILE_TYPE,d.SWITCHOVER_STATUS from v$database d,v$instance i;
+
+NAME      INSTANCE_NAME    HOST_NAME                                                        OPEN_MODE            DATABASE_ROLE    LOG_MODE     CONTROL SWITCHOVER_STATUS
+--------- ---------------- ---------------------------------------------------------------- -------------------- ---------------- ------------ ------- --------------------
+PROD      prod             Alimdba                                                          READ WRITE           PRIMARY          ARCHIVELOG   CURRENT TO STANDBY
+
+
+SQL> col HOST_NAME for a15;
+SQL> /
+
+
+NAME      INSTANCE_NAME    HOST_NAME       OPEN_MODE            DATABASE_ROLE    LOG_MODE     CONTROL SWITCHOVER_STATUS
+--------- ---------------- --------------- -------------------- ---------------- ------------ ------- --------------------
+PROD      prod             Alimdba         READ WRITE           PRIMARY          ARCHIVELOG   CURRENT TO STANDBY
+
 
 
 VIEW:
