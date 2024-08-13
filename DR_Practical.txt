@@ -118,7 +118,7 @@ PROD:
 		4. alter system set LOG_ARCHIVE_DEST_STATE_2=ENABLE scope=both;
 			
 
-Step 8: rename pfile and edit pfile.
+Step 8: on DR rename pfile and edit pfile.
 		mv initprod.ora initproddr.ora	
 		vi initproddr.ora
 		:%s/prod/proddr then press enter
