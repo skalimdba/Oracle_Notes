@@ -2,7 +2,7 @@
 
 ----------------------------------------------------------DR PRACTICAL----------------------------------------------------------
 
-Step 1: Check network connectivity between Prod and DR/Standby.
+Step 1: Create listener on both machine (PR &DR) and Check network connectivity between Prod and DR/Standby.
 
 	On Prod:
 		Check firewall service .it's must be disbale 
