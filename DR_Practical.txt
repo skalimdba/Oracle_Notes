@@ -172,6 +172,7 @@ Step 12:  restore control file & database in DR..
 
 -------------------------------------by backup file from prod----------------------
 	PROD:
+		rman target /
 		RMAN>
 		run{
 		allocate  channel c1 device type disk;
