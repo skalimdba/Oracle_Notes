@@ -167,8 +167,11 @@ Step 12:  restore control file & database in DR..
 ------------------------------by service-------------------------------------------------
 	RMAN>	restore standby controlfile from service prod;   ---> here prod is tnsalias of prodcutin database..
 	RMAN>	alter database mount;
-	
-	RMAN>	restore database from service prod;		---> here prod is tnsalias of prodcutin database..
+		run{
+		allocate  channel c1 device type disk;
+		allocate  channel c2 device type disk;
+		restore database from service prod;		---> here prod is tnsalias of prodcutin database..
+		}
 
 -------------------------------------by backup file from prod----------------------
 	PROD:
