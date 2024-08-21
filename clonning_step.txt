@@ -1,0 +1,102 @@
+
+SOURCE:
+-----------------------------------------------
+----------------------------------------------
+
+Step 1: create pfile from spfile
+		SQL> create pfile='/oracle/RMAN/initclone.ora' from spfile;
+		
+Step 2: Take backup from RMAN ( database, archivelog all, controlfile)
+		
+		
+		
+		rman target /
+		
+		RMAN> 
+		
+		run{
+		allocate channel c1 device type disk;
+		allocate channel c2 device type disk;
+		backup database format '/oracle/RMAN/full_%d_%T_%U';		
+		backup archivelog all format '/oracle/RMAN/arch_%d_%T_%U';
+		backup current controlfile format '/oracle/RMAN/control_%d_%T_%U';
+		}
+			
+			
+			--> here channel used to process fast..channle is depend upon number of cpu..
+			
+
+Step 3: if we clone to another servere then we need to send these all files to clone server..
+
+
+-----------------------------------------------
+----------------------------------------------
+
+CLONE:
+-----------------------------------------------
+----------------------------------------------
+
+Step 1: Edit pfile & make changes according to your neeed (directory)
+		vi initclone.ora
+		:%s/prod/clone
+
+Step 2: Make directory on OS level. (mkdir)
+
+Step 3: start db in nomount stage:
+		
+		export ORACLE_SID=clone
+		
+		SQL>  	startup nomount pfile='/oracle/RMAN/initclone.ora';
+		
+		Create spfile from pfile:
+		
+		SQL> 	create spfile from pfile='/oracle/RMAN/initclone.ora';
+		
+		shut and start nomount from spfile:
+		
+		SQL>	shut abort;
+		SQL>	startup nomount;
+		
+
+Step 4: Set  db_file_name_convert and log_file_name_convert :
+		
+		--> set these two parameter..
+
+	SQL> show parameter convert;	
+
+	SQL>	alter system set db_file_name_convert='/oracle/app/oracle/oradata/PROD/datafile/','/oracle/app/oracle/oradata/CLONE/datafile/' scope =spfile;
+	
+				-->[source location & destination location]
+	SQL>	alter system set log_file_name_convert='/oracle/app/oracle/oradata/PROD/onlinelog/','/oracle/app/oracle/oradata/CLONE/onlinelog/' scope=spfile;
+	
+				-->[source location & destination location]
+				
+	SQL>	shut abort;
+	SQL> 	startup nomount;
+	
+	Make directory on OS level.. (mkdir) 
+	
+	mkdir -p /oracle/app/oracle/oradata/CLONE/datafile/
+	mkdir -p /oracle/app/oracle/oradata/CLONE/onlinelog/
+	
+	
+
+Step 5:Run RMAN Duplicate
+
+		rman auxiliary /
+		RMAN>
+		run{
+		allocate auxiliary channel c1 device type disk;
+		allocate auxiliary channel c2 device type disk;
+		duplicate target database to 'clone' backup location '/oracle/RMAN' nofilenamecheck;
+		}	
+		
+		After completion o these command last line should be as follows..
+		database opened
+		Finished Duplicate Db at 20-AUG-24
+
+		
+		Here rman will restore controlfile from backup location and goto mount stage and
+		resotre database from backup location and goto open stage with resetlogs.
+	
+	
