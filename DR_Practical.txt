@@ -222,7 +222,12 @@ Switchover means switch database role of PROD to DR , DR to PROD & vice versa.
 before switch over...check connectivity between PROD & DR..(tnsping & ping)
 switch log from prod and check on DR whether it is receiving or not..mrp processing apply or not..
 
+first we have to switchover primary database to standby database and then standby database to primary database.
+before switchover first check database role wheteher it's ready to switch or not. in primary site it must be show "TO STANDBY".
+
+
 PR:
+
 SQL> set line 200 pages 200;
 SQL> select d.name,i.instance_name,i.host_name,d.OPEN_MODE,d.DATABASE_ROLE,d.log_mode,d.CONTROLFILE_TYPE,d.SWITCHOVER_STATUS from v$database d,v$instance i;
 
@@ -239,6 +244,41 @@ NAME      INSTANCE_NAME    HOST_NAME       OPEN_MODE            DATABASE_ROLE   
 --------- ---------------- --------------- -------------------- ---------------- ------------ ------- --------------------
 PROD      prod             Alimdba         READ WRITE           PRIMARY          ARCHIVELOG   CURRENT TO STANDBY
 
+SQL>	alter database commit to switchover to standby with session shutdown;
+SQL>	startup mount;
+SQL>	alter system set LOG_ARCHIVE_DEST_STATE_2=DEFER scope=both;
+SQL>	alter system set DB_FILE_NAME_CONVERT='/oracle/app/oracle/oradata/PRODDR/datafile/','/oracle/app/oracle/oradata/PROD/datafile/' 	SCOPE=SPFILE;
+
+		--> this parameter used if RROD datafile location and DR datafile location is different.
+SQL>	alter system set LOG_FILE_NAME_CONVERT='/oracle/app/oracle/oradata/PRODDR/onlinelog/','/oracle/app/oracle/oradata/PROD/onlinelog/' SCOPE=SPFILE;
+
+		--> this parameter used if RROD logifile location and DR logifile location is different.
+
+
+SQL>	shut immediate;
+SQL>	startup mount;
+SQL>	alter database recover managed standby database disconnect from session;  ---> To start MRP process
+
+SQL> select d.name,i.instance_name,i.host_name,d.OPEN_MODE,d.DATABASE_ROLE,d.log_mode,d.CONTROLFILE_TYPE,d.SWITCHOVER_STATUS from v$database d,v$instance i;
+
+
+
+DR:
+
+SQL> set line 200 pages 200;
+SQL> col HOST_NAME for a15;
+
+SQL> select d.name,i.instance_name,i.host_name,d.OPEN_MODE,d.DATABASE_ROLE,d.log_mode,d.CONTROLFILE_TYPE,d.SWITCHOVER_STATUS from v$database d,v$instance i;
+
+SQL>	alter database recover managed standby database cancel; 
+SQL>	alter database commit to switchover to primary with session shutdown;
+SQL>	alter database open;
+SQL>	alter system set LOG_ARCHIVE_DEST_STATE_2=ENABLE scope=both;
+
+SQL>	alter system set log_archive_dest_2='service=prod async valid_for=(online_logfiles,primary_role) db_unique_name=prod' SCOPE=both;
+		--> here service is tns alias of DR..
+
+SQL> select d.name,i.instance_name,i.host_name,d.OPEN_MODE,d.DATABASE_ROLE,d.log_mode,d.CONTROLFILE_TYPE,d.SWITCHOVER_STATUS from v$database d,v$instance i;
 
 
 VIEW:
