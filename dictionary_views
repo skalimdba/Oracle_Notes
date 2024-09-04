@@ -1,14 +1,17 @@
 v$database
 v$instance
 v$parameter
-dba_tablespaces
 v$tablespace
-dba_data_files
+v$sga
 v$datafile
+v$sgastat
+v$resource_limit
+
+
+dba_tablespaces
+dba_data_files
 dba_segments
 dba_extents
-v$sga
-v$sgastat
 dba_roles
 dba_role_privs
 role_tab_privs
@@ -18,3 +21,4 @@ dba_sys_privs
 role_role_privs
   
   
+
