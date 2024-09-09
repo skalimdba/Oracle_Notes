@@ -33,7 +33,7 @@ Configuration Step:
     SQL>    administer key management create keystore identified by oracledbwr;
     keystore altered.
     
-    SQL>    administer key management create LOCAL auto_login keystore from keystore '/u02/app/oracle/admin/oradbwr/wallet/tde/'                    identified by oracledbwr;
+    SQL>    administer key management create LOCAL auto_login keystore from keystore '/u02/app/oracle/admin/oradbwr/wallet/tde/'      identified by oracledbwr;
 
             keystore altered.
     SQL>    select * from v$encryption_wallet;
