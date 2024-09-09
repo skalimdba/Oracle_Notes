@@ -40,7 +40,7 @@ Configuration Step:
 
 3.   Setup the Master Encryption Key
 
-    SQL>     administer key management set key using tag 'oracledbwr_Tablespace_TDE' force keystore identified by oracledbwr with backup               using ‘TDE_backup’;
+    SQL>     administer key management set key using tag 'oracledbwr_Tablespace_TDE' force keystore identified by oracledbwr with backup using ‘TDE_backup’;
 
     SQL>    select * from v$encryption_wallet;
     SQL>    select key_id,tag,keystore_type,creation_time from v$encryption_keys;
