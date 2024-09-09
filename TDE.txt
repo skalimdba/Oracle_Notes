@@ -15,3 +15,36 @@ TDE:
     Transparent Data Encryption (TDE). TDE encrypts sensitive data stored in data files. To prevent unauthorized decryption,
     TDE stores the encryption keys in a security module that is external to the database. 
 
+Configuration Step:
+
+1.    Oracle recommends using the KEYSTORE_CONFIGURATION attribute of the TDE_CONFIGURATION initialization parameter
+      after setting the WALLET_ROOT.
+      WALLET_ROOT         ----> static parameter
+      TDE_CONFIGURATION   ----> dynamic parameter
+
+    SQL>    alter system set WALLET_ROOT="${ORACLE_BASE}/admin/${ORACLE_SID}/wallet" scope=spfile;
+    SQL>    alter system set TDE_CONFIGURATION="KEYSTORE_CONFIGURATION=FILE";
+
+2.     Create the password protected key store
+
+    SQL>    administer key management create keystore identified by oracledbwr;
+    keystore altered.
+    
+    SQL>    administer key management create LOCAL auto_login keystore from keystore '/u02/app/oracle/admin/oradbwr/wallet/tde/'                    identified by oracledbwr;
+
+            keystore altered.
+    SQL>    select * from v$encryption_wallet;
+
+3.   Setup the Master Encryption Key
+
+    SQL>     administer key management set key using tag 'oracledbwr_Tablespace_TDE' force keystore identified by oracledbwr with backup               using ‘TDE_backup’;
+
+    SQL>    select * from v$encryption_wallet;
+    SQL>    select key_id,tag,keystore_type,creation_time from v$encryption_keys;
+
+4.    Online Encryption of Tablespace
+      From 19c onwords no need go for Offline Encryption.This method creates a new datafile with encrypted data
+
+      SQL>    alter tablespace users encryption online encrypt;
+              Tablespace altered.
+
