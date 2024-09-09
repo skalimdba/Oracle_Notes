@@ -1,1 +1,2 @@
-
+SQL>     SELECT UTL_INADDR.get_host_address from dual;
+            ---> To get IP address from db.
