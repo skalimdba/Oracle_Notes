@@ -23,6 +23,9 @@ Configuration Step:
       TDE_CONFIGURATION   ----> dynamic parameter
 
     SQL>    alter system set WALLET_ROOT="${ORACLE_BASE}/admin/${ORACLE_SID}/wallet" scope=spfile;
+    SQL> shut immediate
+    SQL> startup
+    
     SQL>    alter system set TDE_CONFIGURATION="KEYSTORE_CONFIGURATION=FILE";
 
 2.     Create the password protected key store
