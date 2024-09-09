@@ -32,15 +32,17 @@ Configuration Step:
 
     SQL>    administer key management create keystore identified by oracledbwr;
     keystore altered.
+            ---> ewallet.p12     file will create.
     
     SQL>    administer key management create LOCAL auto_login keystore from keystore '/u02/app/oracle/admin/oradbwr/wallet/tde/'      identified by oracledbwr;
-
+            
             keystore altered.
+            --->cwallet.sso     file will create.
     SQL>    select * from v$encryption_wallet;
 
 3.   Setup the Master Encryption Key
 
-    SQL>     administer key management set key using tag 'oracledbwr_Tablespace_TDE' force keystore identified by oracledbwr with backup using ‘TDE_backup’;
+    SQL>     administer key management set key using tag 'oracledbwr_Tablespace_TDE' force keystore identified by oracledbwr with backup using 'TDE_backup';
 
     SQL>    select * from v$encryption_wallet;
     SQL>    select key_id,tag,keystore_type,creation_time from v$encryption_keys;
