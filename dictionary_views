@@ -8,6 +8,7 @@ v$sgastat
 v$resource_limit
 
 
+dba_encrypted_columns
 dba_tablespaces
 dba_data_files
 dba_segments
