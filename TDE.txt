@@ -22,7 +22,13 @@ Configuration Step:
       WALLET_ROOT         ----> static parameter
       TDE_CONFIGURATION   ----> dynamic parameter
 
+    Backup parameter file:-
+
+    SQL>    create pfile='/backup/init[ORACLE_SID].ora' from spfile;
+    File created.
+
     SQL>    alter system set WALLET_ROOT="${ORACLE_BASE}/admin/${ORACLE_SID}/wallet" scope=spfile;
+
     SQL> shut immediate
     SQL> startup
     
