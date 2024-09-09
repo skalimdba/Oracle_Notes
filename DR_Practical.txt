@@ -212,7 +212,7 @@ PR:   SQL> alter system switch logfile;  		--> To switch logfile
 	
   DR:
 	SQL>  	alter database recover managed standby database disconnect from session;   --> To start MRP processs
-	SQL>    select process,status v$managed_standby;
+	SQL>    select process,status from v$managed_standby;
 	SQL>  	alter database recover managed standby database cancel;   --> To stop MRP processs
 	
 
