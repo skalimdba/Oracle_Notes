@@ -1,0 +1,17 @@
+TDE:
+
+1.  Transparent data encryption enables you to encrypt database data files or selected columns of data.
+2.  Transparent Data Encryption (TDE) enables you to encrypt sensitive data that you store in tables and tablespaces.
+3.  It also enables you to encrypt database backups.
+4.  Transparent Data Encryption can be applied to individual columns or entire tablespaces.
+5.  TDE helps protect data stored on media (also called data at rest) 
+    in the event that the storage media or data file is stolen.
+
+6.  To configure Transparent Data Encryption (TDE), you must be granted either the SYSTEM administrative privilege or
+    the ADMINISTER KEY MANAGEMENT system privilege.
+
+7.  Oracle Database uses authentication, authorization, and auditing mechanisms to secure data in the database,
+    but not in the operating system data files where data is stored. To protect these data files, Oracle Database provides
+    Transparent Data Encryption (TDE). TDE encrypts sensitive data stored in data files. To prevent unauthorized decryption,
+    TDE stores the encryption keys in a security module that is external to the database. 
+
