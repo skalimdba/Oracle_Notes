@@ -1,0 +1,58 @@
+Enable TDE in Standby:
+
+Copy the wallet files ewallet.p12, cwallet.sso from primary DB:
+#on Primary DB
+  dgmgrl /
+  edit database "UATDB_STDY" set state='apply-off';
+  edit database "UATDB_PRIM" set state='transport-off';
+
+
+select t.name,e.ENCRYPTIONALG,e.ENCRYPTEDTS,e.STATUS from V$ENCRYPTED_TABLESPACES e, v$tablespace t where t.ts#=e.ts#(+);
+  --> check tablespace encryption details.
+
+orapki wallet display -wallet /u01/app/oracle/admin/${DB_UNIQUE_NAME}/wallet/tde
+
+Encrypting existing Tablespaces:
+
+Turn off the transport and apply
+  If you have a standby for this primary database, turn off the redo log transport and apply
+
+  #on Primary DB
+    dgmgrl /
+    edit database "UATDB_STDY" set state='apply-off';
+    edit database "UATDB_PRIM" set state='transport-off';
+
+Offline Method:
+  1.  Shutdown the application that is using this database
+  2.  Make sure the wallet is open and has autologin enabled on both nodes (on primary and standby) 
+      and has the same master keys on both sides
+
+  3.  Perform below on the Primary
+      select con_id, wallet_type,wrl_parameter, status from v$encryption_wallet;
+      alter tablespace TBS offline normal;
+      ALTER TABLESPACE TBS ENCRYPTION offline USING 'AES256' ENCRYPT;
+      alter tablespace TBS online normal;
+
+ Online Method:
+
+  1.  select con_id, wallet_type,wrl_parameter, status from v$encryption_wallet;
+      ALTER TABLESPACE TBS ENCRYPTION online USING 'AES256' ENCRYPT;
+
+Execute to enable TDE on Standby:
+
+set linesize 250 pagesize 250
+column name format a40
+
+select con_id, wallet_type,wrl_parameter, status from v$encryption_wallet;
+
+ALTER TABLESPACE TBS ENCRYPTION offline USING 'AES256' ENCRYPT;
+exit
+
+orapki wallet display -wallet /u01/app/oracle/admin/${DB_UNIQUE_NAME}/wallet/tde
+
+# On Primary
+
+dgmgrl /
+edit database "UATDB_STDY" set state='apply-on';
+edit database "UATDB_PRIM" set state='transport-on';
+    
