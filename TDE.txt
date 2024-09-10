@@ -72,6 +72,8 @@ Configuration Step:
             keystore altered.
             --->cwallet.sso   (auto-login walle)
     SQL>    select * from v$encryption_wallet;
+        OPEN_NO_MASTER_KEY -> Keystore is already not OPEN use the below command to open
+    SQL>    administer key management set keystore open identified by oracledbwr;
 
 3.   Setup the Master Encryption Key
 
