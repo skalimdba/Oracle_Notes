@@ -87,3 +87,7 @@ Configuration Step:
       SQL>    alter tablespace users encryption online encrypt;
               Tablespace altered.
 
+
+References:
+
+https://oracledbwr.com/configuring-transparent-data-encryption-in-oracle-19c-database/
