@@ -58,4 +58,9 @@ edit database "UATDB_PRIM" set state='transport-on';
 
 Encrypting New Tablespaces:
 CREATE TABLESPACE encrypt_ts DATAFILE '/data/..../encrypt_df.dbf' SIZE 1M ENCRYPTION USING 'AES256' ENCRYPT;
+
+
+References:
+
+https://itnext.io/enable-tde-tablespace-encryption-in-an-oracle-19c-instance-75d3d231efac
     
