@@ -36,7 +36,7 @@ Pros:
 Cons:
 
 1. Additional space required to implement TDE.
-2. If we lost key then it can't be recover from   backup.
+2. If we lost key then data can't be recover from backup. 
 
 3. It is take longer time to retrieve data as compare to without TDE.
 
