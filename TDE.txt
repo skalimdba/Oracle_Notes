@@ -10,10 +10,37 @@ TDE:
 6.  To configure Transparent Data Encryption (TDE), you must be granted either the SYSTEM administrative privilege or
     the ADMINISTER KEY MANAGEMENT system privilege.
 
+7.  The backup which take from data pump (expdp) not required key to import..bcoz TDE not applicable on data pump.
+
 7.  Oracle Database uses authentication, authorization, and auditing mechanisms to secure data in the database,
     but not in the operating system data files where data is stored. To protect these data files, Oracle Database provides
     Transparent Data Encryption (TDE). TDE encrypts sensitive data stored in data files. To prevent unauthorized decryption,
     TDE stores the encryption keys in a security module that is external to the database. 
+
+Prerequisite:
+
+1. TDE should apply only on non oracle   maintained Tablespace..it is not recommended to apply on oracle maintained Tablespace.
+
+2. TDE should apply on non hours business (at night)
+
+3. TDE apply on column level or tablespace level (datafiles)
+
+4. For TDE implementation required same size as     datafile. (so check space on mount point before implementation)
+
+5. TDE required licence.
+
+Pros: 
+
+1. While restoration of database from backup which has a TDE implementation..required a keystore without key it can't be recover..so it's provided data security 
+
+Cons:
+
+1. Additional space required to implement TDE.
+2. If we lost key then it can't be recover from   backup.
+
+3. It is take longer time to retrieve data as compare to without TDE.
+
+
 
 Configuration Step:
 
