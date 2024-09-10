@@ -12,7 +12,7 @@ select t.name,e.ENCRYPTIONALG,e.ENCRYPTEDTS,e.STATUS from V$ENCRYPTED_TABLESPACE
 
 orapki wallet display -wallet /u01/app/oracle/admin/${DB_UNIQUE_NAME}/wallet/tde
 
-Encrypting existing Tablespaces:
+Encrypting existing Tablespaces on Primary:
 
 Turn off the transport and apply
   If you have a standby for this primary database, turn off the redo log transport and apply
@@ -55,4 +55,7 @@ orapki wallet display -wallet /u01/app/oracle/admin/${DB_UNIQUE_NAME}/wallet/tde
 dgmgrl /
 edit database "UATDB_STDY" set state='apply-on';
 edit database "UATDB_PRIM" set state='transport-on';
+
+Encrypting New Tablespaces:
+CREATE TABLESPACE encrypt_ts DATAFILE '/data/..../encrypt_df.dbf' SIZE 1M ENCRYPTION USING 'AES256' ENCRYPT;
     
