@@ -19,13 +19,13 @@ TDE:
 
 Prerequisite:
 
-1. TDE should apply only on non oracle   maintained Tablespace..it is not recommended to apply on oracle maintained Tablespace.
+1. TDE should apply only on non oracle maintained Tablespace..it is not recommended to apply on oracle maintained Tablespace.
 
 2. TDE should apply on non hours business (at night)
 
 3. TDE apply on column level or tablespace level (datafiles)
 
-4. For TDE implementation required same size as     datafile. (so check space on mount point before implementation)
+4. For TDE implementation required same size as datafile. (so check space on mount point before implementation)
 
 5. TDE required licence.
 
