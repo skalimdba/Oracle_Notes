@@ -1,2 +1,5 @@
 SQL>     SELECT UTL_INADDR.get_host_address from dual;
             ---> To get IP address from db.
+
+select t.name,e.ENCRYPTIONALG,e.ENCRYPTEDTS,e.STATUS from V$ENCRYPTED_TABLESPACES e, v$tablespace t where t.ts#=e.ts#(+);
+  --> check tablespace encryption details.
