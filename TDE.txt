@@ -91,9 +91,12 @@ Configuration Step:
       SQL>    alter tablespace tbs encryption online encrypt;
               Tablespace altered.
 
+---------------------------------------------------------------------------------------------------------
+    To Decrypt the tablespace Keystore must be open.
+
 5.    Online Decryption of Tablespace
       SQL>    alter tablespace tbs encryption online decrypt;
-
+----------------------------------------------------------------------------------------------------------
 References:
 
 https://oracledbwr.com/configuring-transparent-data-encryption-in-oracle-19c-database/
