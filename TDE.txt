@@ -67,10 +67,11 @@ Configuration Step:
     keystore altered.
             ---> ewallet.p12   (keystore file)
     
-    SQL>    administer key management create LOCAL auto_login keystore from keystore '/u02/app/oracle/admin/oradbwr/wallet/tde/'      identified by oracledbwr;
+    SQL>    administer key management create auto_login keystore from keystore '/u02/app/oracle/admin/oradbwr/wallet/tde/'identified by oracledbwr;
             
             keystore altered.
             --->cwallet.sso   (auto-login walle)
+
     SQL>    select * from v$encryption_wallet;
         OPEN_NO_MASTER_KEY -> Keystore is already not OPEN use the below command to open
     SQL>    administer key management set keystore open identified by oracledbwr;
