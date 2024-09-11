@@ -55,6 +55,7 @@ Configuration Step:
     File created.
 
     SQL>    alter system set WALLET_ROOT="${ORACLE_BASE}/admin/${ORACLE_SID}/wallet" scope=spfile;
+            e.g: alter system set WALLET_ROOT="/oracle/app/oracle/admin/prod/wallet" scope=spfile;
 
     SQL> shut immediate
     SQL> startup
@@ -63,22 +64,22 @@ Configuration Step:
 
 2.     Create the password protected key store
 
-    SQL>    administer key management create keystore identified by oracledbwr;
+    SQL>    administer key management create keystore identified by alim;
     keystore altered.
             ---> ewallet.p12   (keystore file)
     
-    SQL>    administer key management create auto_login keystore from keystore '/u02/app/oracle/admin/oradbwr/wallet/tde/'identified by oracledbwr;
+    SQL>    administer key management create auto_login keystore from keystore '/oracle/app/oracle/admin/prod/wallet/tde/'identified by alim;
             
             keystore altered.
             --->cwallet.sso   (auto-login walle)
 
     SQL>    select * from v$encryption_wallet;
         OPEN_NO_MASTER_KEY -> Keystore is already not OPEN use the below command to open
-    SQL>    administer key management set keystore open identified by oracledbwr;
+    SQL>    administer key management set keystore open identified by alim;
 
 3.   Setup the Master Encryption Key
 
-    SQL>     administer key management set key using tag 'oracledbwr_Tablespace_TDE' force keystore identified by oracledbwr with backup using 'TDE_backup';
+    SQL>     administer key management set key using tag 'alim_tablespace' force keystore identified by alim with backup using 'TDE_backup';
             ---> ewallet_2024091004540702.p12        
 
     SQL>    select * from v$encryption_wallet;
@@ -87,7 +88,7 @@ Configuration Step:
 4.    Online Encryption of Tablespace
       From 19c onwords no need go for Offline Encryption.This method creates a new datafile with encrypted data
 
-      SQL>    alter tablespace users encryption online encrypt;
+      SQL>    alter tablespace tbs encryption online encrypt;
               Tablespace altered.
 
 
