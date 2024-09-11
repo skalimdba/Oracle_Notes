@@ -91,6 +91,8 @@ Configuration Step:
       SQL>    alter tablespace tbs encryption online encrypt;
               Tablespace altered.
 
+5.    Online Decryption of Tablespace
+      SQL>    alter tablespace tbs encryption online decrypt;
 
 References:
 
