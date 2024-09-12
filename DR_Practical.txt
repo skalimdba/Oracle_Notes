@@ -138,33 +138,38 @@ Step 11: export ORACLE_SID=proddr;
 		SQL>	startup nomount pfile;
 		SQL>	create spfile from pfile;
 		SQL> 	shut abort;
-		SQL>	startup
+		SQL>	startup nomount;
 		
-		DR change some parameter value:
+	DR change some parameter value:
 	SQL> 
 	
 		1. alter system set service_names = 'proddr' scope = both;
 		2. alter system set db_unique_name='proddr' scope=spfile;
-		3. alter system set log_archive_config='dg_config=(prod,proddr)' scope=both;
-			--> here we need to mention db_unique_name of production and all DR..
-
-		4. alter system set log_archive_dest_1='location=/oracle/archivelog valid_for=(all_logfiles,all_roles) db_unique_name=proddr' SCOPE=both;
-		5. alter system set LOG_ARCHIVE_DEST_STATE_2=DEFER scope=both;
-		6. alter system set DB_FILE_NAME_CONVERT='/oracle/app/oracle/oradata/PROD/datafile/','/oracle/app/oracle/oradata/PRODDR/datafile/' SCOPE=SPFILE;
+		3. alter system set DB_FILE_NAME_CONVERT='/oracle/app/oracle/oradata/PROD/datafile/','/oracle/app/oracle/oradata/PRODDR/datafile/' SCOPE=SPFILE;
 
 		--> this parameter used if RROD datafile location and DR datafile location is different.
-		7. alter system set LOG_FILE_NAME_CONVERT='/oracle/app/oracle/oradata/PROD/onlinelog/','/oracle/app/oracle/oradata/PRODDR/onlinelog/' SCOPE=SPFILE;
+		4. alter system set LOG_FILE_NAME_CONVERT='/oracle/app/oracle/oradata/PROD/onlinelog/','/oracle/app/oracle/oradata/PRODDR/onlinelog/' SCOPE=SPFILE;
 		--> this parameter used if RROD logifile location and DR logifile location is different.
 
+		5. alter system set log_archive_dest_1='location=/oracle/archivelog valid_for=(all_logfiles,all_roles) db_unique_name=proddr' SCOPE=both;
+		6. alter system set LOG_ARCHIVE_DEST_STATE_2=DEFER scope=both;
 
-Step 12:  restore control file & database in DR..
+			shut abort;
+			startup mount;
+
+		7. alter system set log_archive_config='dg_config=(prod,proddr)' scope=both;
+			--> here we need to mention db_unique_name of production and all DR..
+
+
+		
+Step 12:  restore control file.
 
 
 	SQL> shut immediate;
 	SQL> startup nomount
 
-	we can restore database by service or by backup 
-------------------------------by service-------------------------------------------------
+we can restore database by service or by backup ( follow any one method from below)
+	----------------------------1)by service-------------------------------------------------
 	RMAN>	restore standby controlfile from service prod;   ---> here prod is tnsalias of prodcutin database..
 	RMAN>	alter database mount;
 		run{
@@ -172,8 +177,8 @@ Step 12:  restore control file & database in DR..
 		allocate  channel c2 device type disk;
 		restore database from service prod;		---> here prod is tnsalias of prodcutin database..
 		}
-
--------------------------------------by backup file from prod----------------------
+			
+	------------------------------2) by backup file from prod----------------------
 	PROD:
 		rman target /
 		RMAN>
@@ -198,9 +203,14 @@ Step 12:  restore control file & database in DR..
 
 -----------------------------------------------------------------------------------------------------------------------
 
+
+---------------------------------------------------------------------------------------------------------
+PR:  
+
+
 	SQ>  select dest_id,error from v$archive_dest where dest_id=2;    -->run on prod to check if any error..
 
-PR:   SQL> alter system switch logfile;  		--> To switch logfile 
+	 SQL> alter system switch logfile;  		--> To switch logfile 
 	
   RUN on both machine:
 	SQL> select d.name,i.instance_name,i.host_name,d.OPEN_MODE,d.DATABASE_ROLE,d.SWITCHOVER_STATUS from v$database d,v$instance i; 
