@@ -7,7 +7,7 @@ TDE:
 5.  TDE helps protect data stored on media (also called data at rest) 
     in the event that the storage media or data file is stolen.
 
-6.  To configure Transparent Data Encryption (TDE), you must be granted either the SYSTEM administrative privilege or
+6.  To configure Transparent Data Encryption (TDE), you must be granted either the SYSKM administrative privilege or
     the ADMINISTER KEY MANAGEMENT system privilege.
 
 7.  The backup which take from data pump (expdp) not required key to import..bcoz TDE not applicable on data pump.
