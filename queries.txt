@@ -3,3 +3,7 @@ SQL>     SELECT UTL_INADDR.get_host_address from dual;
 
 select t.name,e.ENCRYPTIONALG,e.ENCRYPTEDTS,e.STATUS from V$ENCRYPTED_TABLESPACES e, v$tablespace t where t.ts#=e.ts#(+);
   --> check tablespace encryption details.
+
+
+SQL> select name, spare4 from sys.user$ where name='ALIM';
+            -->To  get encrypted password value of user and bt this we can reset the user password( by value)
