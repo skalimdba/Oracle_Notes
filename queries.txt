@@ -7,3 +7,10 @@ select t.name,e.ENCRYPTIONALG,e.ENCRYPTEDTS,e.STATUS from V$ENCRYPTED_TABLESPACE
 
 SQL> select name, spare4 from sys.user$ where name='ALIM';
             -->To  get encrypted password value of user and bt this we can reset the user password( by value)
+
+
+---Apply Archuive ----
+SQL> recover automatic standby database;
+            ---> To apply archive (MRP) manually.
+            OR
+SQL> alter database recover managed standby database using currrent logfile disconnect form session;
