@@ -202,6 +202,8 @@ we can restore database by service or by backup ( follow any one method from bel
 		allocate auxiliary channel c1 device type disk;
 		allocate auxiliary channel c2 device type disk;
 		duplicate target database for standby backup location '/oracle/RMAN_BKP/' nofilenamecheck;
+		release channel c1;
+		release channel c2;
 		}
 
 -----------------------------------------------------------------------------------------------------------------------
