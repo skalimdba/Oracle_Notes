@@ -153,6 +153,9 @@ Step 11: export ORACLE_SID=proddr;
 
 		5. alter system set log_archive_dest_1='location=/oracle/archivelog valid_for=(all_logfiles,all_roles) db_unique_name=proddr' SCOPE=both;
 		6. alter system set LOG_ARCHIVE_DEST_STATE_2=DEFER scope=both;
+		7. alter system set standby_file_management=AUTO;
+		8. alter system set fal_client='proddr';
+		9. alter system set fal_server='prod';
 
 			shut abort;
 			startup mount;
