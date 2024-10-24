@@ -1,0 +1,14 @@
+There are different ways of upgrading to the latest release of Oracle database and Oracle provides multiple methods to upgrade. Few are listed below:
+
+Database Upgrade Assistant (DBUA)
+Manual Upgrade
+Transportable Tablespaces
+Data Pump export/import
+Oracle Streams
+Oracle GoldenGate
+
+Manually Upgradation:
+https://docs.google.com/document/d/1M9hdX2yy9sRPr_4S77GZG-qV8OCDeuovBk41qgHXblA/edit?pli=1#heading=h.s52k64vzdyqd
+
+DBUA:
+https://docs.google.com/document/d/18s1WZpHlzfWZrKgvQG5EiB4hCqfiWDnFWo3XCnJ6zlk/edit?pli=1
