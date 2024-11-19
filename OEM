@@ -1,0 +1,19 @@
+OEM: (Monitoring + Administrative tool)
+1. OEM is monitoring tool.
+2. Monitoring:
+	1. DB
+	2. Server
+	3. Listener
+	4. Tablespace utilization, DB growth
+
+3. we can get email notification if any issue happend on Database or Server.
+
+4. Administrative:
+	1. start and stop database
+	2. Backup Database
+	3. start and stop listener
+
+OEM installation Requirement:
+
+1. 32gb RAM
+2. 200gb storage
