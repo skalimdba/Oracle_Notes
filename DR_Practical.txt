@@ -85,6 +85,8 @@ Step 3: Archivelog should be enable on production
 		
 Step 4: force_logging should be  'YES'
 		if force_logging NO
+If force logging is enabled, all the database changes will be logged in redo log files, even for nologging operations.The above means that if
+FORCE LOGGING is enabled at a higher level, the NOLOGGING at a lower level has no effect. That means that even for a nologging table redo information may still be logged.
 		
 	SQL>  alter database force logging;   ---> to make it enable..
 
