@@ -32,8 +32,9 @@ Step 3: if we clone to another servere then we need to send these all files to c
 -----------------------------------------------
 ----------------------------------------------
 
-CLONE:
+CLONE/Restoration:
 -----------------------------------------------
+by auxiliary
 ----------------------------------------------
 
 Step 1: Edit pfile & make changes according to your neeed (directory)
@@ -98,5 +99,57 @@ Step 5:Run RMAN Duplicate
 		
 		Here rman will restore controlfile from backup location and goto mount stage and
 		resotre database from backup location and goto open stage with resetlogs.
+-----------------------------------------------
+Normal way
+-------------------------------------------------------
+Step 1: Edit pfile & make changes according to your neeed (directory)
+		vi initclone.ora
+		:%s/prod/clone
+
+Step 2: Make directory on OS level. (mkdir)
+
+Step 3: start db in nomount stage:
+		
+		export ORACLE_SID=clone
+		
+		SQL>  	startup nomount pfile='/oracle/RMAN/initclone.ora';
+		
+		Create spfile from pfile:
+		
+		SQL> 	create spfile from pfile='/oracle/RMAN/initclone.ora';
+		
+		shut and start nomount from spfile:
+		
+		SQL>	shut abort;
+		SQL>	startup nomount;
+
+Step 4:
+Make directory on OS level.. (mkdir) 
+
+if we want restore datafile, logfile to different file location then use following command:
+run 
+{
+alter database rename file '/oracle/SPPOR/logfile/new_redo01.log' to '/redo_01/SPOR/logfile/redo01.log';
+alter database rename file '/oracle/SPPOR/logfile/new_redo02.log' to '/redo_01/SPOR/logfile/redo02.log';
+alter database rename file '/oracle/SPPOR/logfile/new_redo03.log' to '/redo_01/SPOR/logfile/redo03.log';
+set newname for datafile 1 to '/fodb_01/SPOR/datafile/system01.dbf';
+set newname for datafile 2 to '/fodb_01/SPOR/datafile/sysaux01.dbf';
+set newname for datafile 3 to '/fodb_01/SPOR/datafile/undotbs01.dbf';
+set newname for tempfile 1 to '/fodb_01/SPOR/datafile/temp01.dbf';
+restore database;
+switch datafile all; or rename file command
+switch tempfile all; or rename file command
+recover database;
+}
+alter database open resetlogs;
+
+if we want restore datafile, logfile to same file location then use following command:
+run
+{
+restore database;
+recover database;
+}
+alter database open resetlogs;
+
 	
 	
