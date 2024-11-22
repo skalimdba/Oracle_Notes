@@ -9,8 +9,19 @@ SQL> select name, spare4 from sys.user$ where name='ALIM';
             -->To  get encrypted password value of user and bt this we can reset the user password( by value)
 
 
----Apply Archuive ----
+---------------Apply Archuive ----------------
 SQL> recover automatic standby database;
             ---> To apply archive (MRP) manually.
             OR
 SQL> alter database recover managed standby database using currrent logfile disconnect form session;
+---------------------------------------------------
+
+SQL> Select spare4 from sys.user$ where name='&name';
+            --> To know user value (use to reset password with same password)
+            OR
+SQL> set long 200;
+SQL> SELECT dbms_metadata.get_ddl('USER','ALIM') from dual;
+
+SQL> alter user alim identified by values 'S:DBBFEBEECD4F270D29312E03881B2890320073ED311D3E7834619C27435D;T:F1DBCB0BD3A10E5EFB29985CCB2BBE85E45711173E6727D3E53159F031E526BAE9AA96F146C0CEE57559893112DD04C54640772A941FC8EB3EF495578F9D30C1C94381805D70E65CCE6BC0B47364B099';
+
+
