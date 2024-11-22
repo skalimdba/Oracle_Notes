@@ -74,14 +74,8 @@ Step 4: Set  db_file_name_convert and log_file_name_convert :
 				
 	SQL>	shut abort;
 	SQL> 	startup nomount;
+		
 	
-	Make directory on OS level.. (mkdir) 
-	
-	mkdir -p /oracle/app/oracle/oradata/CLONE/datafile/
-	mkdir -p /oracle/app/oracle/oradata/CLONE/onlinelog/
-	
-	
-
 Step 5:Run RMAN Duplicate
 
 		rman auxiliary /
@@ -124,7 +118,6 @@ Step 3: start db in nomount stage:
 		SQL>	startup nomount;
 
 Step 4:
-Make directory on OS level.. (mkdir) 
 
 if we want restore datafile, logfile to different file location then use following command:
 run 
