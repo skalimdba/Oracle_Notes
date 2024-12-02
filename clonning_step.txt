@@ -118,6 +118,8 @@ Step 3: start db in nomount stage:
 		SQL>	startup nomount;
 
 Step 4:
+RMAN> restore controlfile from 'path of control file backup location';
+RMAN> alter database mount;
 
 if we want restore datafile, logfile to different file location then use following command:
 run 
