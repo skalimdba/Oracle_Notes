@@ -143,7 +143,7 @@ from 12c we can rename  or move directly without tablespace offline
 
 make sure directory must be exist on os level before execute query..
 
-SQL>	alter databas move datafile '/u02/boi/datafile/boi/SPACE01.dbf' to '/u02/boi/datafile/boi/SPACE01a.dbf';  
+SQL>	alter database move datafile '/u02/boi/datafile/boi/SPACE01.dbf' to '/u02/boi/datafile/boi/SPACE01a.dbf';  
 
 -----------------------------------------------------------------------------------------------------------------------------
 
