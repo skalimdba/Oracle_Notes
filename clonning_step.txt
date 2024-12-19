@@ -1,7 +1,6 @@
 
 SOURCE:
------------------------------------------------
-----------------------------------------------
+==================================================
 
 Step 1: create pfile from spfile
 		SQL> create pfile='/oracle/RMAN/initclone.ora' from spfile;
@@ -33,9 +32,9 @@ Step 3: if we clone to another servere then we need to send these all files to c
 ----------------------------------------------
 
 CLONE/Restoration:
------------------------------------------------
+==================================================
 by auxiliary
-----------------------------------------------
+=================================================
 
 Step 1: Edit pfile & make changes according to your neeed (directory)
 		vi initclone.ora
@@ -93,9 +92,9 @@ Step 5:Run RMAN Duplicate
 		
 		Here rman will restore controlfile from backup location and goto mount stage and
 		resotre database from backup location and goto open stage with resetlogs.
------------------------------------------------
+===========================================================
 Normal way
--------------------------------------------------------
+===========================================================
 Step 1: Edit pfile & make changes according to your neeed (directory)
 		vi initclone.ora
 		:%s/prod/clone
