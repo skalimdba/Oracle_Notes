@@ -127,17 +127,20 @@ run
 alter database rename file '/oracle/SPPOR/logfile/new_redo01.log' to '/redo_01/SPOR/logfile/redo01.log';
 alter database rename file '/oracle/SPPOR/logfile/new_redo02.log' to '/redo_01/SPOR/logfile/redo02.log';
 alter database rename file '/oracle/SPPOR/logfile/new_redo03.log' to '/redo_01/SPOR/logfile/redo03.log';
-set newname for datafile 1 to '/fodb_01/SPOR/datafile/system01.dbf';
-set newname for datafile 2 to '/fodb_01/SPOR/datafile/sysaux01.dbf';
-set newname for datafile 3 to '/fodb_01/SPOR/datafile/undotbs01.dbf';
-set newname for tempfile 1 to '/fodb_01/SPOR/datafile/temp01.dbf';
+set newname for database to '/fodb_01/orcl_cl/datafile/%b';
+set newname for tempfile 1 to '/fodb_01/orcl_cl/datafile/temp01.dbf';
 restore database;
-switch datafile all; or rename file command
-switch tempfile all; or rename file command
-recover database;
 }
+
+switch datafile 1,3,4,5,7 to copy; OR switch database to copy; 
+alter database rename tempfile '/fodb_01/orcl/datafile/temp01.dbf' to '/fodb_01/orcl_cl/datafile/temp01.dbf';
+recover database;
+
 alter database open resetlogs;
 
+set newname ---> to restore another location or different file name (OS level)
+switch --> to change filename/path to logical level..
+==========================================================================================================
 if we want restore datafile, logfile to same file location then use following command:
 run
 {
@@ -145,6 +148,12 @@ restore database;
 recover database;
 }
 alter database open resetlogs;
+
+==========================================================================================================
+set newname for specific datafile:-
+set newname for datafile 1 to '/fodb_01/orcl_cl/datafile/system01.dbf';
+==========================================================================================================
+
 
 	
 	
